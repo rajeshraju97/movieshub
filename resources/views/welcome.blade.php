@@ -903,7 +903,7 @@
 </head>
 
 <body class="font-sans antialiased dark:bg-black dark:text-white/50">
-    <H1>this is the testing of the main page</H1>
+    <H1>this is the testing of the page</H1>
 </body>
 
 </html>
