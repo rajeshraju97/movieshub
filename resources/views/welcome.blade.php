@@ -9,7 +9,9 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-transparent position-absolute top-0 start-0 w-100"
             style="z-index: 10;">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Navbar</a>
+                <a class="navbar-brand" href="#">
+                    <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="img-fluid" style="max-height: 40px;">
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +67,9 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-transparent position-absolute top-0 start-0 w-100"
             style="z-index: 10;">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Navbar</a>
+                <a class="navbar-brand" href="#">
+                    <img src="{{ asset('images/logo2.jpg') }}" alt="Logo" class="img-fluid" style="max-height: 80px;">
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -121,7 +125,9 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-transparent position-absolute top-0 start-0 w-100"
             style="z-index: 10;">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Navbar</a>
+                <a class="navbar-brand" href="#">
+                    <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="img-fluid" style="max-height: 80px;">
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent3" aria-controls="navbarSupportedContent3"
                     aria-expanded="false" aria-label="Toggle navigation">
