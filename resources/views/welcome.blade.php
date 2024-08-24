@@ -10,7 +10,7 @@
             style="z-index: 10;">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
-                    <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="img-fluid" style="max-height: 40px;">
+                    <img src="{{ asset('images/logo3.jpg') }}" alt="Logo" class="img-fluid" style="max-height: 80px;">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1"
@@ -68,7 +68,9 @@
             style="z-index: 10;">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
-                    <img src="{{ asset('images/logo2.jpg') }}" alt="Logo" class="img-fluid" style="max-height: 80px;">
+                    <img src="{{ asset('images/logo3.jpg') }}" alt="Logo" class="img-fluid transparent-logo"
+                        style="max-height: 80px;">
+
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2"
@@ -126,7 +128,7 @@
             style="z-index: 10;">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
-                    <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="img-fluid" style="max-height: 80px;">
+                    <img src="{{ asset('images/logo3.jpg') }}" alt="Logo" class="img-fluid" style="max-height: 80px;">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent3" aria-controls="navbarSupportedContent3"
@@ -178,26 +180,31 @@
 </div>
 
 <!-- Now Playing Section -->
-<h1>Now Playing</h1>
+<h1 class="text-center my-5">Now Playing</h1>
 
-<div class="container text-center">
-    <div class="row">
+<div class="container">
+    <div class="row justify-content-center">
         @foreach ($movies as $index => $movie)
                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-4">
-                    <h2>{{ $movie['title'] }}</h2>
-                    <img src="{{ 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'] }}"
-                        alt="{{ $movie['title'] }} Poster" class="img-fluid">
-                    <p><strong>Overview:</strong> {{ limitWords($movie['overview'], 20) }}</p>
-                    <p><strong>Release Date:</strong> {{ $movie['release_date'] }}</p>
-                    <p><strong>Rating:</strong> {{ $movie['vote_average'] }}/10</p>
+                    <div class="card">
+                        <img src="{{ 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'] }}"
+                            alt="{{ $movie['title'] }} Poster" class="card-img-top img-fluid">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ $movie['title'] }}</h5>
+                            <p class="card-text"><strong>Overview:</strong> {{ limitWords($movie['overview'], 20) }}</p>
+                            <p class="card-text"><strong>Release Date:</strong> {{ $movie['release_date'] }}</p>
+                            <p class="card-text"><strong>Rating:</strong> {{ $movie['vote_average'] }}/10</p>
+                        </div>
+                    </div>
                 </div>
 
-                @if (($index + 1) % 5 == 0)
+                @if (($index + 1) % 6 == 0)
                     </div>
-                    <div class="row">
+                    <div class="row justify-content-center">
                 @endif
         @endforeach
     </div>
 </div>
+
 
 @endsection
