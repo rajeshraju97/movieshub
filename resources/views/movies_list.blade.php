@@ -4,7 +4,7 @@
 <!-- Navbar Inside Each Carousel Slide -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-transparent position-absolute top-0 start-0 w-100 mb-5">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
             <img src="{{ asset('images/logo3.png') }}" alt="Logo" class="img-fluid" style="max-height: 80px;">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent1"
@@ -22,7 +22,7 @@
 
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light fs-5" aria-current="page" href="#">Home</a>
+                    <a class="nav-link text-light fs-5" aria-current="page" href="/">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-light fs-5" href="#">Movies</a>
