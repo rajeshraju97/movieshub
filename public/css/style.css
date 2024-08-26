@@ -10807,7 +10807,7 @@ h5,
     }
 }
 .owl-carousel.home-slider .slider-item .slider-text h2 {
-    font-size: 16px;
+    font-size: 50px;
     text-transform: uppercase;
     letter-spacing: 2px;
     font-family: "Poppins", Arial, sans-serif;
@@ -11012,4 +11012,61 @@ h5,
 .owl-carousel.owl-drag .owl-item {
     -ms-touch-action: pan-y;
     touch-action: pan-y;
+}
+
+/* //card style for the related  search button*/
+
+.search-box {
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+    margin-right: 20px; /* Adds space between search button and Home link */
+    margin-top: 6px;
+}
+
+.input-search {
+    height: 40px;
+    width: 40px;
+    border-style: none;
+    padding: 0px;
+    font-size: 18px;
+    letter-spacing: 2px;
+    outline: none;
+    border-radius: 25px;
+    transition: all 0.5s ease-in-out;
+    padding-right: 40px;
+    color: #fff;
+    background-color: transparent; /* Make search bar transparent */
+}
+
+.input-search::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 18px;
+    letter-spacing: 2px;
+    font-weight: 100;
+}
+
+.btn-search {
+    width: 40px;
+    height: 40px;
+    border-style: none;
+    font-size: 20px;
+    font-weight: bold;
+    outline: none;
+    cursor: pointer;
+    border-radius: 50%;
+    position: absolute;
+    right: 0px;
+    pointer-events: painted;
+    background-color: transparent; /* Transparent button */
+    color: #fff; /* White icon color */
+}
+
+.btn-search:focus ~ .input-search,
+.input-search:focus {
+    width: 300px;
+    border-radius: 0px;
+    background-color: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
 }
