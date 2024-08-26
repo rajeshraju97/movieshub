@@ -3,9 +3,9 @@
 
 
 
-
+<!-- //owl caurosel of the -->
 <div class="home-slider owl-carousel js-fullheight position-relative">
-    @foreach ($now_playing_movies as $movie)
+    @foreach ($nowPlayingMovies as $movie)
         @php
             $rating_out_of_five = round($movie['vote_average'] / 2);
         @endphp
@@ -111,7 +111,39 @@
 
 
 <div class="now-playing owl-carousel">
-    @foreach ($now_playing_movies as $movie)
+    @foreach ($nowPlayingMovies as $movie)
+        @php
+            $rating_out_of_five = round($movie['vote_average'] / 2);
+        @endphp
+        <div class="item">
+            <div class="text-light">
+
+                <img src="{{ 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'] }}"
+                    alt="{{ $movie['title'] }} Poster" class="img-fluid w-60 p-2"
+                    style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ limitWords($movie['title'], 1) }}</h5>
+                    <p><i class="bi bi-calendar-event" style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
+                    <div class="star-rating">
+                        @for ($i = 0; $i < 5; $i++)
+                            @if ($i < $rating_out_of_five)
+                                <i class="bi bi-star-fill text-warning"></i> <!-- Filled star -->
+                            @else
+                                <i class="bi bi-star text-warning"></i> <!-- Empty star -->
+                            @endif
+                        @endfor
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
+<!-- end of the now playing section -->
+
+<!--World Popular movies Section -->
+<h1 class="text-left my-5 text-light">World Popular Movies</h1>
+<div class="now-playing owl-carousel">
+    @foreach ($popularWorldMovies as $movie)
         @php
             $rating_out_of_five = round($movie['vote_average'] / 2);
         @endphp
@@ -139,7 +171,37 @@
     @endforeach
 </div>
 
-<!-- box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; -->
+
+<!--Telugu Popular movies Section -->
+<h1 class="text-left my-5 text-light">Telugu Popular Movies</h1>
+<div class="now-playing owl-carousel">
+    @foreach ($popularTeluguMovies as $movie)
+        @php
+            $rating_out_of_five = round($movie['vote_average'] / 2);
+        @endphp
+        <div class="item">
+            <div class="text-light">
+
+                <img src="{{ 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'] }}"
+                    alt="{{ $movie['title'] }} Poster" class="img-fluid w-60 p-2"
+                    style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ limitWords($movie['title'], 1) }}</h5>
+                    <p><i class="bi bi-calendar-event" style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
+                    <div class="star-rating">
+                        @for ($i = 0; $i < 5; $i++)
+                            @if ($i < $rating_out_of_five)
+                                <i class="bi bi-star-fill text-warning"></i> <!-- Filled star -->
+                            @else
+                                <i class="bi bi-star text-warning"></i> <!-- Empty star -->
+                            @endif
+                        @endfor
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
 
 
 
