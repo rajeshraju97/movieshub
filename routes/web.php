@@ -8,5 +8,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
 
-Route::get('/movies_list', [HomeController::class, 'movies_list']);
+
+
+Route::get('/movies', [MovieListController::class, 'moviesList'])->name('movies.list');
+
 
