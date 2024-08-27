@@ -24,6 +24,8 @@ class MovieListController extends Controller
                 'api_key' => 'f7f87d2556969f9f5d96533dd7a425d1',
                 'sort_by' => 'popularity.desc',
                 'page' => $page,
+
+
             ],
         ]);
 

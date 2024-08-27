@@ -8,6 +8,7 @@
     @foreach ($nowPlayingMovies as $movie)
         @php
             $rating_out_of_five = round($movie['vote_average'] / 2);
+            $rating = $movie['adult'] ? 'Above 17' : 'PG-13'; // Determine the rating
         @endphp
         <!-- Single Slider Item -->
         <div class="slider-item js-fullheight"
@@ -84,6 +85,7 @@
 
                                 <p><i class="bi bi-calendar-event"
                                         style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
+                                <p><i class="bi bi-calendar-event" style="color:#ffee00;"></i>&nbsp;{{$movie['adult']}}</p>
                             </div>
                             <div class="star-rating">
                                 @for ($i = 0; $i < 5; $i++)
@@ -93,7 +95,9 @@
                                         <i class="bi bi-star text-warning"></i> <!-- Empty star -->
                                     @endif
                                 @endfor
+                                <span class="border p-1 ml-2">{{$rating}}</span>
                             </div>
+
 
 
                         </div>
@@ -203,8 +207,66 @@
     @endforeach
 </div>
 
+<!--Top Rated movies Section -->
+<h1 class="text-left my-5 text-light">Top Rated Movies</h1>
+<div class="now-playing owl-carousel">
+    @foreach ($topRatedMovies as $movie)
+        @php
+            $rating_out_of_five = round($movie['vote_average'] / 2);
+        @endphp
+        <div class="item">
+            <div class="text-light">
 
+                <img src="{{ 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'] }}"
+                    alt="{{ $movie['title'] }} Poster" class="img-fluid w-60 p-2"
+                    style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ limitWords($movie['title'], 1) }}</h5>
+                    <p><i class="bi bi-calendar-event" style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
+                    <div class="star-rating">
+                        @for ($i = 0; $i < 5; $i++)
+                            @if ($i < $rating_out_of_five)
+                                <i class="bi bi-star-fill text-warning"></i> <!-- Filled star -->
+                            @else
+                                <i class="bi bi-star text-warning"></i> <!-- Empty star -->
+                            @endif
+                        @endfor
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
 
+<!--Upcoming movies Section -->
+<h1 class="text-left my-5 text-light">Upcoming Movies</h1>
+<div class="now-playing owl-carousel">
+    @foreach ($upcomingMovies as $movie)
+        @php
+            $rating_out_of_five = round($movie['vote_average'] / 2);
+            $posterUrl = blankPoster($movie['poster_path']);
+        @endphp
+        <div class="item">
+            <div class="text-light">
 
+                <img src="{{ $posterUrl }}" alt="{{ $movie['title'] }} Poster" class="img-fluid w-60 p-2"
+                    style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ limitWords($movie['title'], 1) }}</h5>
+                    <p><i class="bi bi-calendar-event" style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
+                    <!-- <div class="star-rating">
+                                                                                                        @for ($i = 0; $i < 5; $i++)
+                                                                                                            @if ($i < $rating_out_of_five)
+                                                                                                                <i class="bi bi-star-fill text-warning"></i> 
+                                                                                                            @else
+                                                                                                                <i class="bi bi-star text-warning"></i> 
+                                                                                                            @endif
+                                                                                                        @endfor
+                                                                                                    </div> -->
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
 
 @endsection

@@ -21,39 +21,30 @@ class HomeController extends Controller
         $nowPlayingMovies = $this->fetchMovies('now_playing', 'IN');
         $popularWorldMovies = $this->fetchMovies('popular');
         $popularTeluguMovies = $this->fetchMovies('popular', 'IN', 'te');
+        $topRatedMovies = $this->fetchMovies('top_rated');
+        $upcomingMovies = $this->fetchMovies('upcoming', 'IN', 'en-US');
 
         // Pass movies with genres to the view
-        return view('welcome', compact('nowPlayingMovies', 'popularWorldMovies', 'popularTeluguMovies'));
+        return view('welcome', compact('nowPlayingMovies', 'popularWorldMovies', 'popularTeluguMovies', 'topRatedMovies', 'upcomingMovies'));
     }
 
     private function fetchMovies($type, $region = null, $language = null)
     {
         $query = [
             'api_key' => $this->apiKey,
-            'sort_by' => 'popularity.desc',
+            'language' => 'en-US',
+            'region' => $region,
         ];
 
-        if ($region) {
-            $query['region'] = $region;
-        }
-
-        if ($language) {
+        if ($language && $type === 'popular' && $region) {
             // Use the /discover/movie endpoint to filter by original language
             $response = $this->client->request('GET', 'https://api.themoviedb.org/3/discover/movie', [
                 'query' => array_merge($query, ['with_original_language' => $language]),
-                'headers' => [
-                    'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmN2Y4N2QyNTU2OTY5ZjlmNWQ5NjUzM2RkN2E0MjVkMSIsIm5iZiI6MTcyNDM5NDA2Mi42NTIxMDEsInN1YiI6IjY0MzNiMGUwOWE2NDM1MDY4OTQ4ZjEyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kv9n-HyuVbEVVoIf9G0X8TMoc8QBIPFKPxqC1wDIID0',
-                    'accept' => 'application/json',
-                ],
             ]);
         } else {
             // For other cases, use the /movie endpoint
             $response = $this->client->request('GET', "https://api.themoviedb.org/3/movie/{$type}", [
                 'query' => $query,
-                'headers' => [
-                    'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmN2Y4N2QyNTU2OTY5ZjlmNWQ5NjUzM2RkN2E0MjVkMSIsIm5iZiI6MTcyNDM5NDA2Mi42NTIxMDEsInN1YiI6IjY0MzNiMGUwOWE2NDM1MDY4OTQ4ZjEyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kv9n-HyuVbEVVoIf9G0X8TMoc8QBIPFKPxqC1wDIID0',
-                    'accept' => 'application/json',
-                ],
             ]);
         }
 
@@ -72,15 +63,10 @@ class HomeController extends Controller
         return $movies;
     }
 
-
     private function fetchGenreMap()
     {
         $response = $this->client->request('GET', 'https://api.themoviedb.org/3/genre/movie/list', [
             'query' => ['api_key' => $this->apiKey],
-            'headers' => [
-                'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmN2Y4N2QyNTU2OTY5ZjlmNWQ5NjUzM2RkN2E0MjVkMSIsIm5iZiI6MTcyNDM5NDA2Mi42NTIxMDEsInN1YiI6IjY0MzNiMGUwOWE2NDM1MDY4OTQ4ZjEyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kv9n-HyuVbEVVoIf9G0X8TMoc8QBIPFKPxqC1wDIID0',
-                'accept' => 'application/json',
-            ],
         ]);
 
         $genres = json_decode($response->getBody(), true)['genres'];

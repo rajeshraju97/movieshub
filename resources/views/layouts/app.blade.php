@@ -23,6 +23,9 @@
 
 <body>
     @yield('content')
+    <footer>
+         
+    </footer>
 </body>
 
 <script src="{{ asset('js/jquery.min.js') }}"></script>
