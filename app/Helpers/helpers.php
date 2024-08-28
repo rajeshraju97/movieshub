@@ -15,3 +15,8 @@ function blankPoster($posterPath)
 
     return $posterPath ? $baseUrl . $posterPath : $defaultImage;
 }
+function animeBlankPoster($posterPath)
+{
+    $defaultImage = asset('images/blank_poster.jpg'); // Replace with the
+    return $posterPath ? $posterPath : $defaultImage;
+}

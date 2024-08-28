@@ -23,9 +23,11 @@ class HomeController extends Controller
         $popularTeluguMovies = $this->fetchMovies('popular', 'IN', 'te');
         $topRatedMovies = $this->fetchMovies('top_rated');
         $upcomingMovies = $this->fetchMovies('upcoming', 'IN', 'en-US');
+        $popularAnime = $this->fetchAnime();
+
 
         // Pass movies with genres to the view
-        return view('welcome', compact('nowPlayingMovies', 'popularWorldMovies', 'popularTeluguMovies', 'topRatedMovies', 'upcomingMovies'));
+        return view('welcome', compact('nowPlayingMovies', 'popularWorldMovies', 'popularTeluguMovies', 'topRatedMovies', 'upcomingMovies', 'popularAnime'));
     }
 
     private function fetchMovies($type, $region = null, $language = null)
@@ -41,6 +43,8 @@ class HomeController extends Controller
             $response = $this->client->request('GET', 'https://api.themoviedb.org/3/discover/movie', [
                 'query' => array_merge($query, ['with_original_language' => $language]),
             ]);
+        } elseif ($type == '') {
+            # code...
         } else {
             // For other cases, use the /movie endpoint
             $response = $this->client->request('GET', "https://api.themoviedb.org/3/movie/{$type}", [
@@ -61,6 +65,13 @@ class HomeController extends Controller
         }
 
         return $movies;
+    }
+
+    private function fetchAnime()
+    {
+        $response = $this->client->request('GET', 'https://api.jikan.moe/v4/top/anime?filter=bypopularity');
+        $anime = json_decode($response->getBody(), true)['data'];
+        return $anime;
     }
 
     private function fetchGenreMap()

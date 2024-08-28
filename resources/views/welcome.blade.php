@@ -85,7 +85,7 @@
 
                                 <p><i class="bi bi-calendar-event"
                                         style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
-                                <p><i class="bi bi-calendar-event" style="color:#ffee00;"></i>&nbsp;{{$movie['adult']}}</p>
+
                             </div>
                             <div class="star-rating">
                                 @for ($i = 0; $i < 5; $i++)
@@ -111,19 +111,16 @@
 
 <!-- Now Playing Section -->
 <h1 class="text-left my-5 text-light">Now Playing</h1>
-
-
-
 <div class="now-playing owl-carousel">
     @foreach ($nowPlayingMovies as $movie)
         @php
             $rating_out_of_five = round($movie['vote_average'] / 2);
+            $posterUrl = blankPoster($movie['poster_path']);
         @endphp
         <div class="item">
             <div class="text-light">
 
-                <img src="{{ 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'] }}"
-                    alt="{{ $movie['title'] }} Poster" class="img-fluid w-60 p-2"
+                <img src="{{ $posterUrl }}" alt="{{ $movie['title'] }} Poster" class="img-fluid w-60 p-2"
                     style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
                 <div class="card-body text-center">
                     <h5 class="card-title">{{ limitWords($movie['title'], 1) }}</h5>
@@ -255,18 +252,59 @@
                     <h5 class="card-title">{{ limitWords($movie['title'], 1) }}</h5>
                     <p><i class="bi bi-calendar-event" style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
                     <!-- <div class="star-rating">
-                                                                                                        @for ($i = 0; $i < 5; $i++)
-                                                                                                            @if ($i < $rating_out_of_five)
-                                                                                                                <i class="bi bi-star-fill text-warning"></i> 
-                                                                                                            @else
-                                                                                                                <i class="bi bi-star text-warning"></i> 
-                                                                                                            @endif
-                                                                                                        @endfor
-                                                                                                    </div> -->
+                                                                                                                                                                                                                                @for ($i = 0; $i < 5; $i++)
+                                                                                                                                                                                                                                    @if ($i < $rating_out_of_five)
+                                                                                                                                                                                                                                        <i class="bi bi-star-fill text-warning"></i> 
+                                                                                                                                                                                                                                    @else
+                                                                                                                                                                                                                                        <i class="bi bi-star text-warning"></i> 
+                                                                                                                                                                                                                                    @endif
+                                                                                                                                                                                                                                @endfor
+                                                                                                                                                                                                                            </div> -->
                 </div>
             </div>
         </div>
     @endforeach
 </div>
+
+<!--Popular Anime Section -->
+<h1 class="text-left my-5 text-light">Popular Anime</h1>
+<div class="now-playing owl-carousel">
+    @foreach ($popularAnime as $anime)
+        @php
+            $rating_out_of_five = round($anime['score'] / 2);
+            $posterUrl = animeBlankPoster($anime['images']['jpg']['image_url']);
+        @endphp
+        <div class="item">
+            <div class="text-light">
+
+                <img src="{{ $posterUrl }}" alt="{{ $anime['title'] }} Poster" class="img-fluid w-60 p-2"
+                    style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                <div class="card-body text-center">
+                    <h6 class="card-title">{{ $anime['title_english'] }}</h6>
+                    <p><span style="color:#ffee00;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                fill="currentColor" class="bi bi-vignette" viewBox="0 0 16 16">
+                                <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8" />
+                                <path
+                                    d="M8.5 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 7a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m1.683-6.281a.5.5 0 1 1-.866-.5.5.5 0 0 1 .866.5m-3.5 6.062a.5.5 0 1 1-.866-.5.5.5 0 0 1 .866.5m4.598-4.598a.5.5 0 1 1-.5-.866.5.5 0 0 1 .5.866m-6.062 3.5a.5.5 0 1 1-.5-.866.5.5 0 0 1 .5.866M11.5 8.5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m-7 0a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m6.281 1.683a.5.5 0 1 1 .5-.866.5.5 0 0 1-.5.866m-6.062-3.5a.5.5 0 1 1 .5-.866.5.5 0 0 1-.5.866m4.598 4.598a.5.5 0 1 1 .866-.5.5.5 0 0 1-.866.5m-3.5-6.062a.5.5 0 1 1 .866-.5.5.5 0 0 1-.866.5" />
+                            </svg></span>&nbsp;{{$anime['status']}}</p>
+                    <p>&nbsp;&nbsp;&nbsp;{{$anime['aired']['string']}}</p>
+
+                    <div class="star-rating">
+                        @for ($i = 0; $i < 5; $i++)
+                            @if ($i < $rating_out_of_five)
+                                <i class="bi bi-star-fill text-warning"></i> <!-- Filled star -->
+                            @else
+                                <i class="bi bi-star text-warning"></i> <!-- Empty star -->
+                            @endif
+                        @endfor
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
+
+
+
 
 @endsection
