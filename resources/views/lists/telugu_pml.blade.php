@@ -63,25 +63,26 @@
 </nav>
 
 <div class="container" style="margin-top:7rem !important;">
-    <h1 class="mb-4 text-center text-light">Movie List</h1>
+    <h1 class="mb-4 text-center text-light">Telugu Popular Movies</h1>
 
     <!-- Movies Grid -->
     <div class="row">
         @foreach ($movies as $movie)
-            <div class="col-md-3 mb-4">
-                <div class="card">
-                    <!-- Movie Image -->
-                    <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" class="card-img-top"
-                        alt="{{ $movie['title'] }}">
-                    <div class="card-body bg-dark text-light">
-                        <h5 class="card-title">{{ limitWords($movie['title'], 3) }}</h5>
-                        <p class="card-text">{{limitWords($movie['overview'], 10) }}</p>
-                        <p class="text-center"><i class="bi bi-calendar-event"
-                                style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
-                        </p>
+                @php
+                    $posterUrl = blankPoster($movie['poster_path']);
+                @endphp
+                <div class="col-md-3 mb-4">
+                    <div class="card">
+                        <!-- Movie Image -->
+                        <img src="{{ $posterUrl }}" class="card-img-top" alt="{{ $movie['title'] }}">
+                        <div class="card-body bg-dark text-light">
+                            <h5 class="card-title">{{ limitWords($movie['title'], 3)}}</h5>
+                            <p class="card-text">{{ limitWords($movie['overview'], 10) }}</p>
+                            <p class="text-center"><i class="bi bi-calendar-event"
+                                    style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
         @endforeach
     </div>
 
@@ -91,7 +92,7 @@
             <ul class="pagination">
                 @if ($currentPage > 1)
                     <li class="page-item">
-                        <a class="page-link" href="{{ url('movies?page=' . ($currentPage - 1)) }}">Previous</a>
+                        <a class="page-link" href="{{ url('/movies/tpml?page=' . ($currentPage - 1)) }}">Previous</a>
                     </li>
                 @endif
 
@@ -103,13 +104,13 @@
 
                 @for ($i = $startPage; $i <= $endPage; $i++)
                     <li class="page-item @if ($i == $currentPage) active @endif">
-                        <a class="page-link" href="{{ url('movies?page=' . $i) }}">{{ $i }}</a>
+                        <a class="page-link" href="{{ url('/movies/tpml?page=' . $i) }}">{{ $i }}</a>
                     </li>
                 @endfor
 
                 @if ($currentPage < $totalPages)
                     <li class="page-item">
-                        <a class="page-link" href="{{ url('movies?page=' . ($currentPage + 1)) }}">Next</a>
+                        <a class="page-link" href="{{ url('/movies/tpml?page=' . ($currentPage + 1)) }}">Next</a>
                     </li>
                 @endif
             </ul>
