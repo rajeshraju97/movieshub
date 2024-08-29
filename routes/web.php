@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Route;
 
-
+use App\Http\Controllers\TvSeriesListController;
 
 
 Route::get('/', [HomeController::class, 'index']);
@@ -20,4 +20,6 @@ Route::get('/movies/tpml', [MovieListController::class, 'tpmoviesList'])->name('
 
 
 
+// TV Series Routes
+Route::get('/tv_series', [TvSeriesListController::class, 'tvSeriesList'])->name('tv.series.list');
 
