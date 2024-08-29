@@ -17,42 +17,52 @@ class MovieListController extends Controller
 
     public function moviesList(Request $request)
     {
-
-
         // Define the number of movies per page
         $moviesPerPage = 8;
+
+        // Default sorting and language, can be overridden by user selection
+        $sort = $request->query('sort', 'popularity.desc');
+        $selectedLanguage = $request->query('language', 'en'); // Default language is English
 
         // Get the current page from the query parameters; default to 1 if not set
         $page = $request->query('page', 1);
 
-        // Fetch data for the current page
+        // Fetch movies based on the selected language and sort
         $response = $this->client->request('GET', 'https://api.themoviedb.org/3/discover/movie', [
             'query' => [
                 'api_key' => $this->apiKey,
-                'sort_by' => 'popularity.desc',
+                'sort_by' => $sort,
                 'page' => $page,
-
-
+                'with_original_language' => $selectedLanguage,
             ],
         ]);
 
         $data = json_decode($response->getBody(), true);
-
-        // Get the movie data for the current page
         $movies = $data['results'];
-
-        // Calculate total pages based on movies per page
         $totalMovies = $data['total_results'];
         $totalPages = ceil($totalMovies / $moviesPerPage);
 
-        // Pass the movies and pagination info to the view
-        return view('lists/movies_list', [
+        // Fetch all languages available on TMDB
+        $response = $this->client->request('GET', 'https://api.themoviedb.org/3/configuration/languages', [
+            'query' => [
+                'api_key' => $this->apiKey,
+            ],
+        ]);
+
+        $languages = json_decode($response->getBody(), true);
+
+        // Pass the movies, languages, and selected language to the view
+        return view('lists.movies_list', [
             'movies' => $movies,
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'moviesPerPage' => $moviesPerPage,
+            'sort' => $sort,
+            'selectedLanguage' => $selectedLanguage,
+            'languages' => $languages,
         ]);
     }
+
 
     public function wpmoviesList(Request $request)
     {

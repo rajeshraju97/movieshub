@@ -74,3 +74,10 @@
     carousel();
     now_playing();
 })(jQuery);
+
+$(document).ready(function () {
+    $("#language").select2({
+        placeholder: "Select a language",
+        allowClear: true,
+    });
+});

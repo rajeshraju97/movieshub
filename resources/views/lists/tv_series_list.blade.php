@@ -86,15 +86,13 @@
                         </div>
                         <div class="mb-3">
                             <label for="language" class="form-label text-light">Language:</label>
-                            <select id="language" name="language" class="form-select" onchange="this.form.submit()">
-                                <option value="en" {{ $language === 'en' ? 'selected' : '' }}>English</option>
-                                <option value="es" {{ $language === 'es' ? 'selected' : '' }}>Spanish</option>
-                                <option value="fr" {{ $language === 'fr' ? 'selected' : '' }}>French</option>
-                                <option value="de" {{ $language === 'de' ? 'selected' : '' }}>German</option>
-                                <option value="te" {{ $language === 'te' ? 'selected' : '' }}>Telugu</option>
-                                <option value="te" {{ $language === 'te' ? 'selected' : '' }}>Telugu</option>
-
-                                <!-- Add more languages as needed -->
+                            <select id="language" name="language" class="form-select select2"
+                                onchange="this.form.submit()">
+                                @foreach ($languages as $language)
+                                    <option value="{{ $language['iso_639_1'] }}" {{ $selectedLanguage === $language['iso_639_1'] ? 'selected' : '' }}>
+                                        {{ $language['english_name'] }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -105,22 +103,35 @@
             <!-- TV Series Grid -->
             <div class="row">
                 @foreach ($series as $tvShow)
-                    <div class="col-md-3 mb-4">
-                        <div class="card">
-                            <!-- TV Series Image -->
-                            <img src="https://image.tmdb.org/t/p/w500{{ $tvShow['poster_path'] }}" class="card-img-top"
-                                alt="{{ $tvShow['name'] }}">
-                            <div class="card-body bg-dark text-light">
-                                <h5 class="card-title">{{ limitWords($tvShow['name'], 3)  }}</h5>
-                                <p class="text-center"><i class="bi bi-calendar-event"
-                                        style="color:#ffee00;"></i>&nbsp;{{$tvShow['first_air_date']}}</p>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                                @php
+                                    $rating_out_of_five = round($tvShow['vote_average'] / 2);
+                                    $posterUrl = blankPoster($tvShow['poster_path']);
+                                @endphp
+                                <div class="col-md-3 mb-4">
+                                    <div class="text-light">
+
+                                        <img src="{{ $posterUrl }}" alt="{{ $tvShow['name'] }} Poster" class="img-fluid w-60 p-2"
+                                            style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">{{ limitWords($tvShow['name'], 1) }}</h5>
+                                            <p><i class="bi bi-calendar-event"
+                                                    style="color:#ffee00;"></i>&nbsp;{{$tvShow['first_air_date']}}</p>
+                                            <div class="star-rating">
+                                                @for ($i = 0; $i < 5; $i++)
+                                                    @if ($i < $rating_out_of_five)
+                                                        <i class="bi bi-star-fill text-warning"></i> <!-- Filled star -->
+                                                    @else
+                                                        <i class="bi bi-star text-warning"></i> <!-- Empty star -->
+                                                    @endif
+                                                @endfor
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                 @endforeach
             </div>
 
+            <!-- Pagination Links -->
             <!-- Pagination Links -->
             <div class="d-flex justify-content-center">
                 <nav>
@@ -128,11 +139,10 @@
                         @if ($currentPage > 1)
                             <li class="page-item">
                                 <a class="page-link"
-                                    href="{{ url('tv_series?page=' . ($currentPage - 1) . '&sort=' . $sort . '&language=' . $language) }}">Previous</a>
+                                    href="{{ url('tv_series?page=' . ($currentPage - 1) . '&language=' . $selectedLanguage . '&sort=' . $sort) }}">Previous</a>
                             </li>
                         @endif
 
-                        <!-- Show Pagination Links Dynamically -->
                         @php
                             $startPage = max(1, $currentPage - 5); // Adjust this to control the range of pages shown
                             $endPage = min($totalPages, $currentPage + 4); // Show 10 pages at most
@@ -141,14 +151,14 @@
                         @for ($i = $startPage; $i <= $endPage; $i++)
                             <li class="page-item @if ($i == $currentPage) active @endif">
                                 <a class="page-link"
-                                    href="{{ url('tv_series?page=' . $i . '&sort=' . $sort . '&language=' . $language) }}">{{ $i }}</a>
+                                    href="{{ url('tv_series?page=' . $i . '&language=' . $selectedLanguage . '&sort=' . $sort) }}">{{ $i }}</a>
                             </li>
                         @endfor
 
                         @if ($currentPage < $totalPages)
                             <li class="page-item">
                                 <a class="page-link"
-                                    href="{{ url('tv_series?page=' . ($currentPage + 1) . '&sort=' . $sort . '&language=' . $language) }}">Next</a>
+                                    href="{{ url('tv_series?page=' . ($currentPage + 1) . '&language=' . $selectedLanguage . '&sort=' . $sort) }}">Next</a>
                             </li>
                         @endif
                     </ul>

@@ -25,10 +25,14 @@
                     <a class="nav-link text-light fs-5" aria-current="page" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light fs-5" href="{{ route('movies.list') }}">Movies</a>
+                    <a class="nav-link text-light fs-5" href="movies">Movies</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light fs-5" href="{{ route('tv.series.list') }}">Tv Series</a>
+                    <a class="nav-link text-light fs-5" href="tv_series">Tv Series</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-light fs-5" href="anime">Anime</a>
                 </li>
 
                 <li class="nav-item dropdown">
@@ -37,7 +41,7 @@
                         <i class="bi bi-person-circle"></i>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Porifle</a></li>
                         <li><a class="dropdown-item" href="#">WatchList</a></li>
                         <li>
                             <hr class="dropdown-divider">
@@ -59,13 +63,13 @@
 </nav>
 
 <div class="container col-md-12" style="margin-top:7rem !important;">
-    <h1 class="mb-4 text-center text-light">TV Series List</h1>
+    <h1 class="mb-4 text-center text-light">Movie List</h1>
     <div class="row">
         <div class="col-md-3">
             <!-- Filters -->
             <div class="mb-4">
                 <h5 class="text-light">Filters</h5>
-                <form method="GET" action="{{ route('tv.series.list') }}">
+                <form method="GET" action="{{ route('movies.list') }}">
                     <div class="mb-3">
                         <div class="me-2 mb-3">
                             <label for="sort" class="form-label text-light">Sort By:</label>
@@ -76,48 +80,60 @@
                                 <option value="popularity.asc" {{ $sort === 'popularity.asc' ? 'selected' : '' }}>
                                     Popularity
                                     Ascending</option>
-                                <option value="name.asc" {{ $sort === 'name.asc' ? 'selected' : '' }}>Title Ascending
+                                <option value="title.asc" {{ $sort === 'title.asc' ? 'selected' : '' }}>Title Ascending
                                     (A-Z)
                                 </option>
-                                <option value="name.desc" {{ $sort === 'name.desc' ? 'selected' : '' }}>Title Descending
+                                <option value="title.desc" {{ $sort === 'title.desc' ? 'selected' : '' }}>Title Descending
                                     (Z-A)
                                 </option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="language" class="form-label text-light">Language:</label>
-                            <select id="language" name="language" class="form-select" onchange="this.form.submit()">
-                                <option value="en" {{ $language === 'en' ? 'selected' : '' }}>English</option>
-                                <option value="es" {{ $language === 'es' ? 'selected' : '' }}>Spanish</option>
-                                <option value="fr" {{ $language === 'fr' ? 'selected' : '' }}>French</option>
-                                <option value="de" {{ $language === 'de' ? 'selected' : '' }}>German</option>
-                                <option value="te" {{ $language === 'te' ? 'selected' : '' }}>Telugu</option>
-                                <option value="te" {{ $language === 'te' ? 'selected' : '' }}>Telugu</option>
-
-                                <!-- Add more languages as needed -->
+                            <select id="language" name="language" class="form-select select2"
+                                onchange="this.form.submit()">
+                                @foreach ($languages as $language)
+                                    <option value="{{ $language['iso_639_1'] }}" {{ $selectedLanguage === $language['iso_639_1'] ? 'selected' : '' }}>
+                                        {{ $language['english_name'] }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
+
+
         <div class="col-md-9">
-            <!-- TV Series Grid -->
+            <!-- Movies Grid -->
             <div class="row">
-                @foreach ($series as $tvShow)
-                    <div class="col-md-3 mb-4">
-                        <div class="card">
-                            <!-- TV Series Image -->
-                            <img src="https://image.tmdb.org/t/p/w500{{ $tvShow['poster_path'] }}" class="card-img-top"
-                                alt="{{ $tvShow['name'] }}">
-                            <div class="card-body bg-dark text-light">
-                                <h5 class="card-title">{{ limitWords($tvShow['name'], 3)  }}</h5>
-                                <p class="text-center"><i class="bi bi-calendar-event"
-                                        style="color:#ffee00;"></i>&nbsp;{{$tvShow['first_air_date']}}</p>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                @foreach ($movies as $movie)
+                                @php
+                                    $rating_out_of_five = round($movie['vote_average'] / 2);
+                                    $posterUrl = blankPoster($movie['poster_path']);
+                                @endphp
+                                <div class="col-md-3 mb-4">
+                                    <div class="text-light">
+
+                                        <img src="{{ $posterUrl }}" alt="{{ $movie['title'] }} Poster" class="img-fluid w-60 p-2"
+                                            style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title">{{ limitWords($movie['title'], 1) }}</h5>
+                                            <p><i class="bi bi-calendar-event"
+                                                    style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
+                                            <div class="star-rating">
+                                                @for ($i = 0; $i < 5; $i++)
+                                                    @if ($i < $rating_out_of_five)
+                                                        <i class="bi bi-star-fill text-warning"></i> <!-- Filled star -->
+                                                    @else
+                                                        <i class="bi bi-star text-warning"></i> <!-- Empty star -->
+                                                    @endif
+                                                @endfor
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                 @endforeach
             </div>
 
@@ -128,11 +144,10 @@
                         @if ($currentPage > 1)
                             <li class="page-item">
                                 <a class="page-link"
-                                    href="{{ url('tv_series?page=' . ($currentPage - 1) . '&sort=' . $sort . '&language=' . $language) }}">Previous</a>
+                                    href="{{ url('movies?page=' . ($currentPage - 1) . '&language=' . $selectedLanguage . '&sort=' . $sort) }}">Previous</a>
                             </li>
                         @endif
 
-                        <!-- Show Pagination Links Dynamically -->
                         @php
                             $startPage = max(1, $currentPage - 5); // Adjust this to control the range of pages shown
                             $endPage = min($totalPages, $currentPage + 4); // Show 10 pages at most
@@ -141,24 +156,27 @@
                         @for ($i = $startPage; $i <= $endPage; $i++)
                             <li class="page-item @if ($i == $currentPage) active @endif">
                                 <a class="page-link"
-                                    href="{{ url('tv_series?page=' . $i . '&sort=' . $sort . '&language=' . $language) }}">{{ $i }}</a>
+                                    href="{{ url('movies?page=' . $i . '&language=' . $selectedLanguage . '&sort=' . $sort) }}">{{ $i }}</a>
                             </li>
                         @endfor
 
                         @if ($currentPage < $totalPages)
                             <li class="page-item">
                                 <a class="page-link"
-                                    href="{{ url('tv_series?page=' . ($currentPage + 1) . '&sort=' . $sort . '&language=' . $language) }}">Next</a>
+                                    href="{{ url('movies?page=' . ($currentPage + 1) . '&language=' . $selectedLanguage . '&sort=' . $sort) }}">Next</a>
                             </li>
                         @endif
                     </ul>
                 </nav>
             </div>
+
         </div>
     </div>
 
-
-
 </div>
+<!-- Initialize select2 -->
+
+
+
 
 @endsection
