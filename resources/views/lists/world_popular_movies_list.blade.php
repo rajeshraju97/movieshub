@@ -76,8 +76,7 @@
                         <!-- Movie Image -->
                         <img src="{{ $posterUrl }}" class="card-img-top" alt="{{ $movie['title'] }}">
                         <div class="card-body bg-dark text-light">
-                            <h5 class="card-title">{{ limitWords($movie['title'], 3)}}</h5>
-                            <p class="card-text">{{ limitWords($movie['overview'], 10) }}</p>
+                            <h5 class="card-title">{{ limitWords($movie['title'], 3)}}</h5> 
                             <p class="text-center"><i class="bi bi-calendar-event"
                                     style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
                         </div>

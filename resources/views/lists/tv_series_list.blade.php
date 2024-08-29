@@ -101,11 +101,10 @@
                     <!-- TV Series Image -->
                     <img src="https://image.tmdb.org/t/p/w500{{ $tvShow['poster_path'] }}" class="card-img-top"
                         alt="{{ $tvShow['name'] }}">
-                    <div class="card-body">
+                    <div class="card-body bg-dark text-light">
                         <h5 class="card-title">{{ limitWords($tvShow['name'], 3)  }}</h5>
-                        <p class="card-text">{{ limitWords($tvShow['overview'], 10) }}</p>
-                        <p class="card-text"><small class="text-muted">First Air Date:
-                                {{ $tvShow['first_air_date'] }}</small>
+                        <p class="text-center"><i class="bi bi-calendar-event"
+                                style="color:#ffee00;"></i>&nbsp;{{$tvShow['first_air_date']}}</p>
                         </p>
                     </div>
                 </div>
