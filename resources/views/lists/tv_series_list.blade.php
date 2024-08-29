@@ -52,35 +52,45 @@
 
 <div class="container" style="margin-top:7rem !important;">
     <h1 class="mb-4 text-center text-light">TV Series List</h1>
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Filters -->
+            <div class="mb-4">
+                <h5 class="text-light">Filters</h5>
+                <form method="GET" action="{{ route('tv.series.list') }}">
+                    <div class="mb-3">
+                        <div class="me-2 mb-3">
+                            <label for="sort" class="form-label text-light">Sort By:</label>
+                            <select id="sort" name="sort" class="form-select" onchange="this.form.submit()">
+                                <option value="popularity.desc" {{ $sort === 'popularity.desc' ? 'selected' : '' }}>
+                                    Popularity
+                                    Descending</option>
+                                <option value="popularity.asc" {{ $sort === 'popularity.asc' ? 'selected' : '' }}>
+                                    Popularity
+                                    Ascending</option>
+                                <option value="name.asc" {{ $sort === 'name.asc' ? 'selected' : '' }}>Title Ascending
+                                    (A-Z)
+                                </option>
+                                <option value="name.desc" {{ $sort === 'name.desc' ? 'selected' : '' }}>Title Descending
+                                    (Z-A)
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="language" class="form-label text-light">Language:</label>
+                            <select id="language" name="language" class="form-select" onchange="this.form.submit()">
+                                <option value="en" {{ $language === 'en' ? 'selected' : '' }}>English</option>
+                                <option value="es" {{ $language === 'es' ? 'selected' : '' }}>Spanish</option>
+                                <option value="fr" {{ $language === 'fr' ? 'selected' : '' }}>French</option>
+                                <option value="de" {{ $language === 'de' ? 'selected' : '' }}>German</option>
+                                <option value="te" {{ $language === 'te' ? 'selected' : '' }}>Telugu</option>
+                                <option value="te" {{ $language === 'te' ? 'selected' : '' }}>Telugu</option>
 
-    <!-- Filters -->
-    <div class="mb-4 text-center">
-        <form method="GET" action="{{ route('tv.series.list') }}">
-            <div class="d-flex justify-content-center mb-2">
-                <div class="me-2">
-                    <label for="sort" class="form-label text-light">Sort By:</label>
-                    <select id="sort" name="sort" class="form-select" onchange="this.form.submit()">
-                        <option value="popularity.desc" {{ $sort === 'popularity.desc' ? 'selected' : '' }}>Popularity
-                            Descending</option>
-                        <option value="popularity.asc" {{ $sort === 'popularity.asc' ? 'selected' : '' }}>Popularity
-                            Ascending</option>
-                        <option value="name.asc" {{ $sort === 'name.asc' ? 'selected' : '' }}>Title Ascending (A-Z)
-                        </option>
-                        <option value="name.desc" {{ $sort === 'name.desc' ? 'selected' : '' }}>Title Descending (Z-A)
-                        </option>
-                    </select>
-                </div>
-                <div>
-                    <label for="language" class="form-label text-light">Language:</label>
-                    <select id="language" name="language" class="form-select" onchange="this.form.submit()">
-                        <option value="en" {{ $language === 'en' ? 'selected' : '' }}>English</option>
-                        <option value="es" {{ $language === 'es' ? 'selected' : '' }}>Spanish</option>
-                        <option value="fr" {{ $language === 'fr' ? 'selected' : '' }}>French</option>
-                        <option value="de" {{ $language === 'de' ? 'selected' : '' }}>German</option>
-                        <option value="te" {{ $language === 'te' ? 'selected' : '' }}>Telugu</option>
-                        <!-- Add more languages as needed -->
-                    </select>
-                </div>
+                                <!-- Add more languages as needed -->
+                            </select>
+                        </div>
+                    </div>
+                </form>
             </div>
         </form>
     </div>

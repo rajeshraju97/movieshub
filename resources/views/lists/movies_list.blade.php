@@ -64,56 +64,65 @@
 
 <div class="container" style="margin-top:7rem !important;">
     <h1 class="mb-4 text-center text-light">Movie List</h1>
-
-    <!-- Movies Grid -->
     <div class="row">
-        @foreach ($movies as $movie)
-            <div class="col-md-3 mb-4">
-                <div class="card">
-                    <!-- Movie Image -->
-                    <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" class="card-img-top"
-                        alt="{{ $movie['title'] }}">
-                    <div class="card-body bg-dark text-light">
-                        <h5 class="card-title">{{ limitWords($movie['title'], 3) }}</h5>
-                        <p class="text-center"><i class="bi bi-calendar-event"
-                                style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
-                        </p>
+        <div class="col-md-3">
+            
+        </div>
+
+
+        <div class="col-md-9">
+            <!-- Movies Grid -->
+            <div class="row">
+                @foreach ($movies as $movie)
+                    <div class="col-md-3 mb-4">
+                        <div class="card">
+                            <!-- Movie Image -->
+                            <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}" class="card-img-top"
+                                alt="{{ $movie['title'] }}">
+                            <div class="card-body bg-dark text-light">
+                                <h5 class="card-title">{{ limitWords($movie['title'], 3) }}</h5>
+                                <p class="text-center"><i class="bi bi-calendar-event"
+                                        style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                @endforeach
             </div>
-        @endforeach
+
+            <!-- Pagination Links -->
+            <div class="d-flex justify-content-center">
+                <nav>
+                    <ul class="pagination">
+                        @if ($currentPage > 1)
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url('movies?page=' . ($currentPage - 1)) }}">Previous</a>
+                            </li>
+                        @endif
+
+                        <!-- Show Pagination Links Dynamically -->
+                        @php
+                            $startPage = max(1, $currentPage - 5); // Adjust this to control the range of pages shown
+                            $endPage = min($totalPages, $currentPage + 4); // Show 10 pages at most
+                        @endphp
+
+                        @for ($i = $startPage; $i <= $endPage; $i++)
+                            <li class="page-item @if ($i == $currentPage) active @endif">
+                                <a class="page-link" href="{{ url('movies?page=' . $i) }}">{{ $i }}</a>
+                            </li>
+                        @endfor
+
+                        @if ($currentPage < $totalPages)
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url('movies?page=' . ($currentPage + 1)) }}">Next</a>
+                            </li>
+                        @endif
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </div>
 
-    <!-- Pagination Links -->
-    <div class="d-flex justify-content-center">
-        <nav>
-            <ul class="pagination">
-                @if ($currentPage > 1)
-                    <li class="page-item">
-                        <a class="page-link" href="{{ url('movies?page=' . ($currentPage - 1)) }}">Previous</a>
-                    </li>
-                @endif
-
-                <!-- Show Pagination Links Dynamically -->
-                @php
-                    $startPage = max(1, $currentPage - 5); // Adjust this to control the range of pages shown
-                    $endPage = min($totalPages, $currentPage + 4); // Show 10 pages at most
-                @endphp
-
-                @for ($i = $startPage; $i <= $endPage; $i++)
-                    <li class="page-item @if ($i == $currentPage) active @endif">
-                        <a class="page-link" href="{{ url('movies?page=' . $i) }}">{{ $i }}</a>
-                    </li>
-                @endfor
-
-                @if ($currentPage < $totalPages)
-                    <li class="page-item">
-                        <a class="page-link" href="{{ url('movies?page=' . ($currentPage + 1)) }}">Next</a>
-                    </li>
-                @endif
-            </ul>
-        </nav>
-    </div>
 </div>
 
 
