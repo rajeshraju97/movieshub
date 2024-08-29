@@ -38,7 +38,7 @@ class MovieListController extends Controller
         $totalPages = ceil($totalMovies / $moviesPerPage);
 
         // Pass the movies and pagination info to the view
-        return view('movies_list', [
+        return view('lists/movies_list', [
             'movies' => $movies,
             'currentPage' => $page,
             'totalPages' => $totalPages,
