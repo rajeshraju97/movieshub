@@ -92,7 +92,7 @@
                                 <option value="fr" {{ $language === 'fr' ? 'selected' : '' }}>French</option>
                                 <option value="de" {{ $language === 'de' ? 'selected' : '' }}>German</option>
                                 <option value="te" {{ $language === 'te' ? 'selected' : '' }}>Telugu</option>
-                                <option value="te" {{ $language === 'te' ? 'selected' : '' }}>Telugu</option>
+                                <option value="te" {{ $language === 'te' ? 'selected' : '' }}>Korean</option>
 
                                 <!-- Add more languages as needed -->
                             </select>
