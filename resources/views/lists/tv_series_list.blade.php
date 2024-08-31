@@ -86,19 +86,23 @@
                         </div>
                         <div class="mb-3">
                             <label for="language" class="form-label text-light">Language:</label>
-                            <select id="language" name="language" class="form-select select2"
-                                onchange="this.form.submit()">
-                                @foreach ($languages as $language)
-                                    <option value="{{ $language['iso_639_1'] }}" {{ $selectedLanguage === $language['iso_639_1'] ? 'selected' : '' }}>
-                                        {{ $language['english_name'] }}
-                                    </option>
+                            <select id="language" name="language" class="form-select" onchange="this.form.submit()">
+                                @foreach ($languageCounts as $language)
+                                    @if(is_array($language) && isset($language['iso_639_1'], $language['language'], $language['totalSeries']))
+                                        <option value="{{ $language['iso_639_1'] }}" {{ $selectedLanguage === $language['iso_639_1'] ? 'selected' : '' }}>
+                                            {{ $language['language'] }} ({{ $language['totalSeries'] }})
+                                        </option>
+                                    @endif
                                 @endforeach
                             </select>
+
                         </div>
                     </div>
                 </form>
             </div>
         </div>
+
+        <!-- list for TV Series -->
         <div class="col-md-9">
             <!-- TV Series Grid -->
             <div class="row">
@@ -164,6 +168,18 @@
                     </ul>
                 </nav>
             </div>
+            <!-- Jump to Page Form -->
+            <div class="d-flex justify-content-center mt-3">
+                <form action="{{ url('tv_series') }}" method="get" class="form-inline">
+                    <label for="jumpToPage" class="mr-2 text-light fw-bold">Jump to Page:</label>
+                    <input type="number" id="jumpToPage" name="page" class="form-control" min="1"
+                        max="{{ $totalPages }}" value="{{ $currentPage }}">
+                    <button type="submit" class="btn btn-primary ml-2">Go</button>
+                </form>
+            </div>
+            <p class=" text-center text-light"><span class="fw-bold">Total Pages:</span>{{$totalPages}}</p>
+
+            <p class=" text-center text-light"><span class="fw-bold">Total Pages:</span>{{$totalPages}}</p>
         </div>
     </div>
 

@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Cache;
 
 class MovieListController extends Controller
 {
@@ -15,43 +15,111 @@ class MovieListController extends Controller
         $this->client = new Client();
     }
 
-    public function moviesList(Request $request)
+    private function fetchMoviesWithPagination($endpoint, $page, $additionalParams = [])
     {
-        // Define the number of movies per page
-        $moviesPerPage = 8;
+        $maxPage = 500;
 
-        // Default sorting and language, can be overridden by user selection
-        $sort = $request->query('sort', 'popularity.desc');
-        $selectedLanguage = $request->query('language', 'en'); // Default language is English
+        // Adjust the page number for the API's 500-page limit
+        $adjustedPage = $page % $maxPage;
+        if ($adjustedPage === 0) {
+            $adjustedPage = $maxPage;
+        }
 
-        // Get the current page from the query parameters; default to 1 if not set
-        $page = $request->query('page', 1);
+        // Build the query parameters
+        $queryParams = array_merge([
+            'api_key' => $this->apiKey,
+            'page' => $adjustedPage,
+        ], $additionalParams);
 
-        // Fetch movies based on the selected language and sort
-        $response = $this->client->request('GET', 'https://api.themoviedb.org/3/discover/movie', [
-            'query' => [
-                'api_key' => $this->apiKey,
-                'sort_by' => $sort,
-                'page' => $page,
-                'with_original_language' => $selectedLanguage,
-            ],
+        // Make the request to the TMDB API
+        $response = $this->client->request('GET', $endpoint, [
+            'query' => $queryParams,
         ]);
 
-        $data = json_decode($response->getBody(), true);
+        return json_decode($response->getBody(), true);
+    }
+
+    public function moviesList(Request $request)
+    {
+        $moviesPerPage = 8;
+        $sort = $request->query('sort', 'popularity.desc');
+        $selectedLanguage = $request->query('language', 'en');
+        $selectedGenre = $request->query('genre', []);
+        $page = $request->query('page', 1);
+
+        // Ensure selectedGenre is an array
+        if (is_string($selectedGenre)) {
+            $selectedGenre = explode(',', $selectedGenre);
+        }
+
+        // Fetch languages
+        $languageCounts = Cache::remember('movieslanguageCounts', now()->addHours(24), function () {
+            $client = $this->client;
+            $apiKey = $this->apiKey;
+
+            $languageCounts = [];
+            $response = $client->request('GET', 'https://api.themoviedb.org/3/configuration/languages', [
+                'query' => [
+                    'api_key' => $apiKey,
+                ],
+            ]);
+
+            $languages = json_decode($response->getBody(), true);
+
+            foreach ($languages as $language) {
+                $response = $client->request('GET', 'https://api.themoviedb.org/3/discover/movie', [
+                    'query' => [
+                        'api_key' => $apiKey,
+                        'with_original_language' => $language['iso_639_1'],
+                    ],
+                ]);
+
+                $data = json_decode($response->getBody(), true);
+                $totalMovies = $data['total_results'];
+
+                if ($totalMovies > 0) {
+                    $languageCounts[] = [
+                        'iso_639_1' => $language['iso_639_1'],
+                        'language' => $language['english_name'],
+                        'totalMovies' => $totalMovies,
+                    ];
+                }
+            }
+
+            usort($languageCounts, function ($a, $b) {
+                return $b['totalMovies'] <=> $a['totalMovies'];
+            });
+
+            return $languageCounts;
+        });
+
+        // Fetch genres
+        $genresResponse = $this->client->request('GET', 'https://api.themoviedb.org/3/genre/movie/list', [
+            'query' => [
+                'api_key' => $this->apiKey,
+                'language' => 'en',
+            ],
+        ]);
+        $genres = json_decode($genresResponse->getBody(), true)['genres'];
+
+        // Build query parameters
+        $queryParams = [
+            'sort_by' => $sort,
+            'with_original_language' => $selectedLanguage,
+        ];
+
+        if (!empty($selectedGenre)) {
+            $queryParams['with_genres'] = implode(',', $selectedGenre);
+        }
+
+
+        // Fetch movies with pagination
+        $data = $this->fetchMoviesWithPagination('https://api.themoviedb.org/3/discover/movie', $page, $queryParams);
+
         $movies = $data['results'];
         $totalMovies = $data['total_results'];
         $totalPages = ceil($totalMovies / $moviesPerPage);
 
-        // Fetch all languages available on TMDB
-        $response = $this->client->request('GET', 'https://api.themoviedb.org/3/configuration/languages', [
-            'query' => [
-                'api_key' => $this->apiKey,
-            ],
-        ]);
-
-        $languages = json_decode($response->getBody(), true);
-
-        // Pass the movies, languages, and selected language to the view
         return view('lists.movies_list', [
             'movies' => $movies,
             'currentPage' => $page,
@@ -59,38 +127,29 @@ class MovieListController extends Controller
             'moviesPerPage' => $moviesPerPage,
             'sort' => $sort,
             'selectedLanguage' => $selectedLanguage,
-            'languages' => $languages,
+            'selectedGenre' => $selectedGenre,
+            'languageCounts' => $languageCounts,
+            'genres' => $genres,
         ]);
     }
 
 
+
+
+
+
+
     public function wpmoviesList(Request $request)
     {
-        // Define the number of movies per page
         $moviesPerPage = 8;
-
-        // Get the current page from the query parameters; default to 1 if not set
         $page = $request->query('page', 1);
 
-        // Fetch data for the current page
-        $response = $this->client->request('GET', 'https://api.themoviedb.org/3/movie/popular', [
-            'query' => [
-                'api_key' => $this->apiKey,
-                'sort_by' => 'popularity.desc',
-                'page' => $page,
-
-
-            ],
+        $data = $this->fetchMoviesWithPagination('https://api.themoviedb.org/3/movie/popular', $page, [
+            'sort_by' => 'popularity.desc',
         ]);
 
-        $data = json_decode($response->getBody(), true);
-
-        // Get the movie data for the current page
         $movies = $data['results'];
-
-        // Calculate total pages based on movies per page
-        $totalMovies = $data['total_results'];
-        $totalPages = ceil($totalMovies / $moviesPerPage);
+        $totalPages = $data['total_pages'];
 
         return view('lists/world_popular_movies_list', [
             'movies' => $movies,
@@ -102,31 +161,17 @@ class MovieListController extends Controller
 
     public function trmoviesList(Request $request)
     {
-        // Define the number of movies per page
         $moviesPerPage = 8;
-
-        // Get the current page from the query parameters; default to 1 if not set
         $page = $request->query('page', 1);
 
-        // Fetch data for the current page
-        $response = $this->client->request('GET', 'https://api.themoviedb.org/3/movie/top_rated', [
-            'query' => [
-                'api_key' => $this->apiKey,
-                'sort_by' => 'popularity.desc',
-                'page' => $page,
-
-
-            ],
+        $data = $this->fetchMoviesWithPagination('https://api.themoviedb.org/3/movie/top_rated', $page, [
+            'sort_by' => 'popularity.desc',
         ]);
 
-        $data = json_decode($response->getBody(), true);
-
-        // Get the movie data for the current page
         $movies = $data['results'];
-
-        // Calculate total pages based on movies per page
         $totalMovies = $data['total_results'];
         $totalPages = ceil($totalMovies / $moviesPerPage);
+
         return view('lists/top_rated_ml', [
             'movies' => $movies,
             'currentPage' => $page,
@@ -137,34 +182,20 @@ class MovieListController extends Controller
 
     public function tpmoviesList(Request $request)
     {
-        // Define the number of movies per page
         $moviesPerPage = 8;
-
-        // Get the current page from the query parameters; default to 1 if not set
         $page = $request->query('page', 1);
 
-        // Fetch data for the current page
-        $response = $this->client->request('GET', 'https://api.themoviedb.org/3/discover/movie', [
-            'query' => [
-                'api_key' => $this->apiKey,
-                'sort_by' => 'popularity.desc',
-                'page' => $page,
-                'language' => 'en-US',
-                'region' => 'IN',
-                'with_original_language' => 'te'
-
-
-            ],
+        $data = $this->fetchMoviesWithPagination('https://api.themoviedb.org/3/discover/movie', $page, [
+            'sort_by' => 'popularity.desc',
+            'language' => 'en-US',
+            'region' => 'IN',
+            'with_original_language' => 'te',
         ]);
 
-        $data = json_decode($response->getBody(), true);
-
-        // Get the movie data for the current page
         $movies = $data['results'];
-
-        // Calculate total pages based on movies per page
         $totalMovies = $data['total_results'];
         $totalPages = ceil($totalMovies / $moviesPerPage);
+
         return view('lists/telugu_pml', [
             'movies' => $movies,
             'currentPage' => $page,
@@ -172,9 +203,4 @@ class MovieListController extends Controller
             'moviesPerPage' => $moviesPerPage,
         ]);
     }
-
-
-
-
-
 }

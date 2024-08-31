@@ -65,44 +65,59 @@
 <div class="container col-md-12" style="margin-top:7rem !important;">
     <h1 class="mb-4 text-center text-light">Movie List</h1>
     <div class="row">
+
+
         <div class="col-md-3">
             <!-- Filters -->
             <div class="mb-4">
                 <h5 class="text-light">Filters</h5>
                 <form method="GET" action="{{ route('movies.list') }}">
                     <div class="mb-3">
-                        <div class="me-2 mb-3">
-                            <label for="sort" class="form-label text-light">Sort By:</label>
-                            <select id="sort" name="sort" class="form-select" onchange="this.form.submit()">
-                                <option value="popularity.desc" {{ $sort === 'popularity.desc' ? 'selected' : '' }}>
-                                    Popularity
-                                    Descending</option>
-                                <option value="popularity.asc" {{ $sort === 'popularity.asc' ? 'selected' : '' }}>
-                                    Popularity
-                                    Ascending</option>
-                                <option value="title.asc" {{ $sort === 'title.asc' ? 'selected' : '' }}>Title Ascending
-                                    (A-Z)
-                                </option>
-                                <option value="title.desc" {{ $sort === 'title.desc' ? 'selected' : '' }}>Title Descending
-                                    (Z-A)
-                                </option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="language" class="form-label text-light">Language:</label>
-                            <select id="language" name="language" class="form-select select2"
-                                onchange="this.form.submit()">
-                                @foreach ($languages as $language)
-                                    <option value="{{ $language['iso_639_1'] }}" {{ $selectedLanguage === $language['iso_639_1'] ? 'selected' : '' }}>
-                                        {{ $language['english_name'] }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <label for="sort" class="form-label text-light">Sort By:</label>
+                        <select id="sort" name="sort" class="form-select" onchange="this.form.submit()">
+                            <option value="popularity.desc" {{ $sort === 'popularity.desc' ? 'selected' : '' }}>Popularity
+                                Descending</option>
+                            <option value="popularity.asc" {{ $sort === 'popularity.asc' ? 'selected' : '' }}>Popularity
+                                Ascending</option>
+                            <option value="title.asc" {{ $sort === 'title.asc' ? 'selected' : '' }}>Title Ascending (A-Z)
+                            </option>
+                            <option value="title.desc" {{ $sort === 'title.desc' ? 'selected' : '' }}>Title Descending
+                                (Z-A)</option>
+                        </select>
                     </div>
+
+                    <div class="mb-3">
+                        <label for="language" class="form-label text-light">Language:</label>
+                        <select id="language" name="language" class="form-select" onchange="this.form.submit()">
+                            @foreach ($languageCounts as $language)
+                                <option value="{{ $language['iso_639_1'] }}" {{ $selectedLanguage === $language['iso_639_1'] ? 'selected' : '' }}>
+                                    {{ $language['language'] }} ({{ $language['totalMovies'] }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Genre -->
+                    <div class="mb-3">
+                        <label for="genre" class="form-label text-light">Genre:</label>
+                        <select id="genre" name="genre" class="form-select" onchange="this.form.submit()">
+                            <option value="">Select Genre</option>
+                            @foreach ($genres as $genre)
+                                <option value="{{ $genre['id'] }}" {{ in_array($genre['id'], (array) $selectedGenre) ? 'selected' : '' }}>
+                                    {{ $genre['name'] }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                 </form>
+
             </div>
         </div>
+
+
+
+
 
 
         <div class="col-md-9">
@@ -142,10 +157,15 @@
                 <nav>
                     <ul class="pagination">
                         @if ($currentPage > 1)
-                            <li class="page-item">
-                                <a class="page-link"
-                                    href="{{ url('movies?page=' . ($currentPage - 1) . '&language=' . $selectedLanguage . '&sort=' . $sort) }}">Previous</a>
-                            </li>
+                                            <li class="page-item @if ($i == $currentPage) active @endif">
+                                                <a class="page-link"
+                                                    href="{{ url('movies?page=' . $i .
+                            '&language=' . (is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) .
+                            '&sort=' . (is_array($sort) ? implode(',', $sort) : $sort) .
+                            '&genre=' . (is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre)) }}">
+                                                    {{ $i }}
+                                                </a>
+                                            </li>
                         @endif
 
                         @php
@@ -154,21 +174,51 @@
                         @endphp
 
                         @for ($i = $startPage; $i <= $endPage; $i++)
-                            <li class="page-item @if ($i == $currentPage) active @endif">
-                                <a class="page-link"
-                                    href="{{ url('movies?page=' . $i . '&language=' . $selectedLanguage . '&sort=' . $sort) }}">{{ $i }}</a>
-                            </li>
+                                            <li class="page-item @if ($i == $currentPage) active @endif">
+                                                <a class="page-link"
+                                                    href="{{ url('movies?page=' . $i .
+                            '&language=' . (is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) .
+                            '&sort=' . (is_array($sort) ? implode(',', $sort) : $sort) .
+                            '&genre=' . (is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre)) }}">
+                                                    {{ $i }}
+                                                </a>
+                                            </li>
                         @endfor
 
                         @if ($currentPage < $totalPages)
-                            <li class="page-item">
-                                <a class="page-link"
-                                    href="{{ url('movies?page=' . ($currentPage + 1) . '&language=' . $selectedLanguage . '&sort=' . $sort) }}">Next</a>
-                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link"
+                                                    href="{{ url('movies?page=' . $i .
+                            '&language=' . (is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) .
+                            '&sort=' . (is_array($sort) ? implode(',', $sort) : $sort) .
+                            '&genre=' . (is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre)) }}">
+                                                    {{ $i }}
+                                                </a>
+                                            </li>
                         @endif
                     </ul>
                 </nav>
+                <br>
+
             </div>
+
+            <!-- Jump to Page Form -->
+            <div class="d-flex justify-content-center mt-3 mb-3">
+                <form action="{{ url('movies') }}" method="get" class="form-inline">
+                    <input type="hidden" name="language"
+                        value="{{ htmlspecialchars(is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) }}">
+                    <input type="hidden" name="sort" value="{{ htmlspecialchars($sort) }}">
+                    <input type="hidden" name="genre"
+                        value="{{ htmlspecialchars(is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre) }}">
+                    <label for="jumpToPage" class="mr-2 text-light fw-bold">Jump to Page:</label>
+                    <input type="number" id="jumpToPage" name="page" class="form-control" min="1"
+                        max="{{ $totalPages }}" value="{{ $currentPage }}">
+                    <button type="submit" class="btn btn-primary ml-2">Go</button>
+                </form>
+            </div>
+
+            <p class=" text-center text-light"><span class="fw-bold">Total Pages:</span>{{$totalPages}}</p>
+
 
         </div>
     </div>

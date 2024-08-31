@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('content')
-
 <!-- Navbar Inside Each Carousel Slide -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-transparent position-absolute top-0 start-0 w-100 mb-5">
     <div class="container-fluid">
@@ -62,24 +61,34 @@
     </div>
 </nav>
 
-<div class="container" style="margin-top:7rem !important;">
-    <h1 class="mb-4 text-center text-light">Telugu Popular Movies</h1>
+<div class="container col-md-12" style="margin-top:7rem !important;">
+    <h1 class="mb-1 text-center text-light">Animes</h1>
+    <p class=" mb-3 text-center text-light"><span>(Total Anime:</span>{{$total_anime}})</p>
 
-    <!-- Movies Grid -->
-    <div class="row">
-        @foreach ($movies as $movie)
+    <div class="row anime-row">
+        @foreach ($animes as $anime)
                 @php
-                    $rating_out_of_five = round($movie['vote_average'] / 2);
-                    $posterUrl = blankPoster($movie['poster_path']);
+                    $rating_out_of_five = round($anime['score'] / 2);
+                    $posterUrl = animeBlankPoster($anime['images']['jpg']['image_url']);
                 @endphp
-                <div class="col-md-3 mb-4">
+                <div class="col anime-col mb-4">
                     <div class="text-light">
-
-                        <img src="{{ $posterUrl }}" alt="{{ $movie['title'] }} Poster" class="img-fluid w-60 p-2"
-                            style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                        <img src="{{ $posterUrl }}" alt="{{ $anime['title'] }} Poster" class="img-fluid"
+                            style="border-radius: 17px; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
                         <div class="card-body text-center">
-                            <h5 class="card-title">{{ limitWords($movie['title'], 1) }}</h5>
-                            <p><i class="bi bi-calendar-event" style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
+                            <h6 class="card-title">{{ $anime['title_english'] }}</h6>
+                            <p>
+                                <span style="color:#ffee00;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-vignette" viewBox="0 0 16 16">
+                                        <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8" />
+                                        <path
+                                            d="M8.5 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 7a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m1.683-6.281a.5.5 0 1 1-.866-.5.5.5 0 0 1 .866.5m-3.5 6.062a.5.5 0 1 1-.866-.5.5.5 0 0 1 .866.5m4.598-4.598a.5.5 0 1 1-.5-.866.5.5 0 0 1 .5.866m-6.062 3.5a.5.5 0 1 1-.5-.866.5.5 0 0 1 .5.866M11.5 8.5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m-7 0a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m6.281 1.683a.5.5 0 1 1 .5-.866.5.5 0 0 1-.5.866m-6.062-3.5a.5.5 0 1 1 .5-.866.5.5 0 0 1-.5.866m4.598 4.598a.5.5 0 1 1 .866-.5.5.5 0 0 1-.866.5" />
+                                    </svg>
+                                </span>&nbsp;{{$anime['status']}}
+                            </p>
+                            <p>&nbsp;&nbsp;&nbsp;{{$anime['aired']['string']}}</p>
+
                             <div class="star-rating">
                                 @for ($i = 0; $i < 5; $i++)
                                     @if ($i < $rating_out_of_five)
@@ -101,11 +110,10 @@
             <ul class="pagination">
                 @if ($currentPage > 1)
                     <li class="page-item">
-                        <a class="page-link" href="{{ url('/movies/tpml?page=' . ($currentPage - 1)) }}">Previous</a>
+                        <a class="page-link" href="{{ url('anime?page=' . ($currentPage - 1)) }}">Previous</a>
                     </li>
                 @endif
 
-                <!-- Show Pagination Links Dynamically -->
                 @php
                     $startPage = max(1, $currentPage - 5); // Adjust this to control the range of pages shown
                     $endPage = min($totalPages, $currentPage + 4); // Show 10 pages at most
@@ -113,13 +121,13 @@
 
                 @for ($i = $startPage; $i <= $endPage; $i++)
                     <li class="page-item @if ($i == $currentPage) active @endif">
-                        <a class="page-link" href="{{ url('/movies/tpml?page=' . $i) }}">{{ $i }}</a>
+                        <a class="page-link" href="{{ url('anime?page=' . $i) }}">{{ $i }}</a>
                     </li>
                 @endfor
 
                 @if ($currentPage < $totalPages)
                     <li class="page-item">
-                        <a class="page-link" href="{{ url('/movies/tpml?page=' . ($currentPage + 1)) }}">Next</a>
+                        <a class="page-link" href="{{ url('anime?page=' . ($currentPage + 1)) }}">Next</a>
                     </li>
                 @endif
             </ul>
@@ -127,16 +135,16 @@
     </div>
     <!-- Jump to Page Form -->
     <div class="d-flex justify-content-center mt-3">
-        <form action="{{ url('movies/tpml') }}" method="get" class="form-inline">
+        <form action="{{ url('anime') }}" method="get" class="form-inline">
             <label for="jumpToPage" class="mr-2 text-light fw-bold">Jump to Page:</label>
             <input type="number" id="jumpToPage" name="page" class="form-control" min="1" max="{{ $totalPages }}"
                 value="{{ $currentPage }}">
             <button type="submit" class="btn btn-primary ml-2">Go</button>
         </form>
     </div>
-    <p class=" text-center text-light"><span class="fw-bold">Total Pages:</span>{{$totalPages}}</p>
-
+    <p class="text-center text-light"><span class="fw-bold">Total Pages:</span> {{$totalPages}}</p>
 </div>
+
 
 
 

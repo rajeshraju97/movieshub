@@ -11072,3 +11072,12 @@ h5,
 }
 
 /* for testing purposes */
+.anime-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.anime-col {
+    flex: 0 0 20%; /* 100% / 5 = 20% */
+    max-width: 20%;
+}

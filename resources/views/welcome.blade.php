@@ -256,14 +256,14 @@
                     <h5 class="card-title">{{ limitWords($movie['title'], 1) }}</h5>
                     <p><i class="bi bi-calendar-event" style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
                     <!-- <div class="star-rating">
-                                                                                                                                                                                                                                                                    @for ($i = 0; $i < 5; $i++)
-                                                                                                                                                                                                                                                                        @if ($i < $rating_out_of_five)
-                                                                                                                                                                                                                                                                            <i class="bi bi-star-fill text-warning"></i> 
-                                                                                                                                                                                                                                                                        @else
-                                                                                                                                                                                                                                                                            <i class="bi bi-star text-warning"></i> 
-                                                                                                                                                                                                                                                                        @endif
-                                                                                                                                                                                                                                                                    @endfor
-                                                                                                                                                                                                                                                                </div> -->
+                                                                                                                                                                                                                                                                        @for ($i = 0; $i < 5; $i++)
+                                                                                                                                                                                                                                                                            @if ($i < $rating_out_of_five)
+                                                                                                                                                                                                                                                                                <i class="bi bi-star-fill text-warning"></i> 
+                                                                                                                                                                                                                                                                            @else
+                                                                                                                                                                                                                                                                                <i class="bi bi-star text-warning"></i> 
+                                                                                                                                                                                                                                                                            @endif
+                                                                                                                                                                                                                                                                        @endfor
+                                                                                                                                                                                                                                                                    </div> -->
                 </div>
             </div>
         </div>
@@ -271,7 +271,7 @@
 </div>
 
 <!--Popular Anime Section -->
-<h1 class="text-left my-5 text-light">Popular Anime</h1>
+<h1 class="text-left my-5 text-light"><a href="anime/popular_anime" class="text-light">Popular Anime</a></h1>
 <div class="now-playing owl-carousel">
     @foreach ($popularAnime as $anime)
         @php
@@ -309,7 +309,7 @@
 </div>
 
 <!--Upcoming Anime Section -->
-<h1 class="text-left my-5 text-light">Upcoming Anime</h1>
+<h1 class="text-left my-5 text-light"><a href="anime/upcoming_anime" class="text-light">Upcoming Anime</a></h1>
 <div class="now-playing owl-carousel">
     @foreach ($upcomingAnime as $anime)
         @php
@@ -327,22 +327,22 @@
 
                     <h6 class="card-title">{{$title}}</h6>
                     <!-- <p><span style="color:#ffee00;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                                    fill="currentColor" class="bi bi-vignette" viewBox="0 0 16 16">
-                                                                    <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8" />
-                                                                    <path
-                                                                        d="M8.5 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 7a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m1.683-6.281a.5.5 0 1 1-.866-.5.5.5 0 0 1 .866.5m-3.5 6.062a.5.5 0 1 1-.866-.5.5.5 0 0 1 .866.5m4.598-4.598a.5.5 0 1 1-.5-.866.5.5 0 0 1 .5.866m-6.062 3.5a.5.5 0 1 1-.5-.866.5.5 0 0 1 .5.866M11.5 8.5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m-7 0a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m6.281 1.683a.5.5 0 1 1 .5-.866.5.5 0 0 1-.5.866m-6.062-3.5a.5.5 0 1 1 .5-.866.5.5 0 0 1-.5.866m4.598 4.598a.5.5 0 1 1 .866-.5.5.5 0 0 1-.866.5m-3.5-6.062a.5.5 0 1 1 .866-.5.5.5 0 0 1-.866.5" />
-                                                                </svg></span>&nbsp;{{$anime['status']}}</p>
-                                                        <p>&nbsp;&nbsp;&nbsp;{{$anime['aired']['string']}}</p> -->
+                                                                        fill="currentColor" class="bi bi-vignette" viewBox="0 0 16 16">
+                                                                        <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8" />
+                                                                        <path
+                                                                            d="M8.5 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 7a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m1.683-6.281a.5.5 0 1 1-.866-.5.5.5 0 0 1 .866.5m-3.5 6.062a.5.5 0 1 1-.866-.5.5.5 0 0 1 .866.5m4.598-4.598a.5.5 0 1 1-.5-.866.5.5 0 0 1 .5.866m-6.062 3.5a.5.5 0 1 1-.5-.866.5.5 0 0 1 .5.866M11.5 8.5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m-7 0a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m6.281 1.683a.5.5 0 1 1 .5-.866.5.5 0 0 1-.5.866m-6.062-3.5a.5.5 0 1 1 .5-.866.5.5 0 0 1-.5.866m4.598 4.598a.5.5 0 1 1 .866-.5.5.5 0 0 1-.866.5m-3.5-6.062a.5.5 0 1 1 .866-.5.5.5 0 0 1-.866.5" />
+                                                                    </svg></span>&nbsp;{{$anime['status']}}</p>
+                                                            <p>&nbsp;&nbsp;&nbsp;{{$anime['aired']['string']}}</p> -->
 
                     <!-- <div class="star-rating">
-                                                            @for ($i = 0; $i < 5; $i++)
-                                                                @if ($i < $rating_out_of_five)
-                                                                    <i class="bi bi-star-fill text-warning"></i> 
-                                                                @else
-                                                                    <i class="bi bi-star text-warning"></i> 
-                                                                @endif
-                                                            @endfor
-                                                        </div> -->
+                                                                @for ($i = 0; $i < 5; $i++)
+                                                                    @if ($i < $rating_out_of_five)
+                                                                        <i class="bi bi-star-fill text-warning"></i> 
+                                                                    @else
+                                                                        <i class="bi bi-star text-warning"></i> 
+                                                                    @endif
+                                                                @endfor
+                                                            </div> -->
                 </div>
             </div>
         </div>

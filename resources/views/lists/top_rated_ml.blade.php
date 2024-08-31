@@ -69,16 +69,26 @@
     <div class="row">
         @foreach ($movies as $movie)
                 @php
+                    $rating_out_of_five = round($movie['vote_average'] / 2);
                     $posterUrl = blankPoster($movie['poster_path']);
                 @endphp
                 <div class="col-md-3 mb-4">
-                    <div class="card">
-                        <!-- Movie Image -->
-                        <img src="{{ $posterUrl }}" class="card-img-top" alt="{{ $movie['title'] }}">
-                        <div class="card-body bg-dark text-light">
-                            <h5 class="card-title">{{ limitWords($movie['title'], 3)}}</h5>
-                            <p class="text-center"><i class="bi bi-calendar-event"
-                                    style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
+                    <div class="text-light">
+
+                        <img src="{{ $posterUrl }}" alt="{{ $movie['title'] }} Poster" class="img-fluid w-60 p-2"
+                            style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ limitWords($movie['title'], 1) }}</h5>
+                            <p><i class="bi bi-calendar-event" style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
+                            <div class="star-rating">
+                                @for ($i = 0; $i < 5; $i++)
+                                    @if ($i < $rating_out_of_five)
+                                        <i class="bi bi-star-fill text-warning"></i> <!-- Filled star -->
+                                    @else
+                                        <i class="bi bi-star text-warning"></i> <!-- Empty star -->
+                                    @endif
+                                @endfor
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -115,6 +125,17 @@
             </ul>
         </nav>
     </div>
+    <!-- Jump to Page Form -->
+    <div class="d-flex justify-content-center mt-3">
+        <form action="{{ url('movies/trml') }}" method="get" class="form-inline">
+            <label for="jumpToPage" class="mr-2 text-light fw-bold">Jump to Page:</label>
+            <input type="number" id="jumpToPage" name="page" class="form-control" min="1" max="{{ $totalPages }}"
+                value="{{ $currentPage }}">
+            <button type="submit" class="btn btn-primary ml-2">Go</button>
+        </form>
+    </div>
+    <p class=" text-center text-light"><span class="fw-bold">Total Pages:</span>{{$totalPages}}</p>
+
 </div>
 
 
