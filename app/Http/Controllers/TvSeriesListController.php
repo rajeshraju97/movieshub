@@ -17,17 +17,46 @@ class TvSeriesListController extends Controller
         $this->client = new Client();
     }
 
+    private function fetchMoviesWithPagination($endpoint, $page, $additionalParams = [])
+    {
+        $maxPage = 500;
 
+        // Adjust the page number for the API's 500-page limit
+        $adjustedPage = $page % $maxPage;
+        if ($adjustedPage === 0) {
+            $adjustedPage = $maxPage;
+        }
+
+        // Build the query parameters
+        $queryParams = array_merge([
+            'api_key' => $this->apiKey,
+            'page' => $adjustedPage,
+        ], $additionalParams);
+
+        // Make the request to the TMDB API
+        $response = $this->client->request('GET', $endpoint, [
+            'query' => $queryParams,
+        ]);
+
+        return json_decode($response->getBody(), true);
+    }
 
     public function tvSeriesList(Request $request)
     {
         // Define the number of TV series per page
-        $seriesPerPage = 8;
+        $seriesPerPage = 20;
 
         // Get the current page, sort order, and language from the query parameters
-        $page = $request->query('page', 1);
-        $sort = $request->query('sort', 'popularity.desc'); // Default sorting
-        $selectedLanguage = $request->query('language', 'en'); // Default language is English
+        $page = $request->query('p', 1);
+        $sort = $request->query('s', 'popularity.desc'); // Default sorting
+        $selectedLanguage = $request->query('l', 'en'); // Default language is English
+        $selectedGenre = $request->query('g', []);
+
+        // Ensure selectedGenre is an array
+        if (is_string($selectedGenre)) {
+            $selectedGenre = explode(',', $selectedGenre);
+        }
+
 
         // Check if the language counts are already cached
         $languageCounts = Cache::remember('SerieslanguageCounts', now()->addHours(24), function () {
@@ -67,17 +96,31 @@ class TvSeriesListController extends Controller
             return $languageCounts;
         });
 
-        // Fetch data for the current page
-        $response = $this->client->request('GET', 'https://api.themoviedb.org/3/discover/tv', [
+
+        // Fetch genres
+        $genresResponse = $this->client->request('GET', 'https://api.themoviedb.org/3/genre/tv/list', [
             'query' => [
                 'api_key' => $this->apiKey,
-                'sort_by' => $sort,
-                'page' => $page,
-                'with_original_language' => $selectedLanguage,
+                'language' => 'en',
             ],
         ]);
+        $genres = json_decode($genresResponse->getBody(), true)['genres'];
 
-        $data = json_decode($response->getBody(), true);
+        // Build query parameters
+        $queryParams = [
+            'sort_by' => $sort,
+            'with_original_language' => $selectedLanguage,
+        ];
+
+        if (!empty($selectedGenre)) {
+            $queryParams['with_genres'] = implode(',', $selectedGenre);
+        }
+
+
+
+        // Fetch data for the current page
+        $data = $this->fetchMoviesWithPagination('https://api.themoviedb.org/3/discover/tv', $page, $queryParams);
+
 
         // Get the TV series data for the current page
         $series = $data['results'];
@@ -87,7 +130,7 @@ class TvSeriesListController extends Controller
         $totalPages = ceil($totalSeries / $seriesPerPage);
 
         // Pass the TV series and pagination info to the view
-        return view('lists/tv_series_list', [
+        return view('lists.tv_series_list', [
             'series' => $series,
             'currentPage' => $page,
             'totalPages' => $totalPages,
@@ -95,6 +138,8 @@ class TvSeriesListController extends Controller
             'sort' => $sort,
             'selectedLanguage' => $selectedLanguage,
             'languageCounts' => $languageCounts,
+            'genres' => $genres,
+            'selectedGenre' => $selectedGenre,
         ]);
     }
 
