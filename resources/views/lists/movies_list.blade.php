@@ -24,9 +24,18 @@
                 <li class="nav-item">
                     <a class="nav-link text-light fs-5" aria-current="page" href="/">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-light fs-5" href="movies">Movies</a>
-                </li>
+                <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle fs-5" href="movies" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Movies
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="movies/wpml">World Popular Movies</a></li>
+                                    <li><a class="dropdown-item" href="movies/trml">Top Rated Movies</a></li>
+                                    <li><a class="dropdown-item" href="movies/tpml">Telugu Popular Movies</a></li>
+
+                                </ul>
+                            </li>
                 <li class="nav-item">
                     <a class="nav-link text-light fs-5" href="tv_series">Tv Series</a>
                 </li>
@@ -74,7 +83,7 @@
                 <form method="GET" action="{{ route('movies.list') }}">
                     <div class="mb-3">
                         <label for="sort" class="form-label text-light">Sort By:</label>
-                        <select id="sort" name="sort" class="form-select" onchange="this.form.submit()">
+                        <select id="sort" name="s" class="form-select" onchange="this.form.submit()">
                             <option value="popularity.desc" {{ $sort === 'popularity.desc' ? 'selected' : '' }}>Popularity
                                 Descending</option>
                             <option value="popularity.asc" {{ $sort === 'popularity.asc' ? 'selected' : '' }}>Popularity
@@ -88,7 +97,7 @@
 
                     <div class="mb-3">
                         <label for="language" class="form-label text-light">Language:</label>
-                        <select id="language" name="language" class="form-select" onchange="this.form.submit()">
+                        <select id="language" name="l" class="form-select" onchange="this.form.submit()">
                             @foreach ($languageCounts as $language)
                                 <option value="{{ $language['iso_639_1'] }}" {{ $selectedLanguage === $language['iso_639_1'] ? 'selected' : '' }}>
                                     {{ $language['language'] }} ({{ $language['totalMovies'] }})
@@ -100,7 +109,7 @@
                     <!-- Genre -->
                     <div class="mb-3">
                         <label for="genre" class="form-label text-light">Genre:</label>
-                        <select id="genre" name="genre" class="form-select" onchange="this.form.submit()">
+                        <select id="genre" name="g" class="form-select" onchange="this.form.submit()">
                             <option value="">Select Genre</option>
                             @foreach ($genres as $genre)
                                 <option value="{{ $genre['id'] }}" {{ in_array($genre['id'], (array) $selectedGenre) ? 'selected' : '' }}>
@@ -159,10 +168,10 @@
                         @if ($currentPage > 1)
                                             <li class="page-item @if ($i == $currentPage) active @endif">
                                                 <a class="page-link"
-                                                    href="{{ url('movies?page=' . $i .
-                            '&language=' . (is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) .
-                            '&sort=' . (is_array($sort) ? implode(',', $sort) : $sort) .
-                            '&genre=' . (is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre)) }}">
+                                                    href="{{ url('movies?p=' . $i .
+                            '&l=' . (is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) .
+                            '&s=' . (is_array($sort) ? implode(',', $sort) : $sort) .
+                            '&g=' . (is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre)) }}">
                                                     {{ $i }}
                                                 </a>
                                             </li>
@@ -176,10 +185,10 @@
                         @for ($i = $startPage; $i <= $endPage; $i++)
                                             <li class="page-item @if ($i == $currentPage) active @endif">
                                                 <a class="page-link"
-                                                    href="{{ url('movies?page=' . $i .
-                            '&language=' . (is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) .
-                            '&sort=' . (is_array($sort) ? implode(',', $sort) : $sort) .
-                            '&genre=' . (is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre)) }}">
+                                                    href="{{ url('movies?p=' . $i .
+                            '&l=' . (is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) .
+                            '&s=' . (is_array($sort) ? implode(',', $sort) : $sort) .
+                            '&g=' . (is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre)) }}">
                                                     {{ $i }}
                                                 </a>
                                             </li>
@@ -188,10 +197,10 @@
                         @if ($currentPage < $totalPages)
                                             <li class="page-item">
                                                 <a class="page-link"
-                                                    href="{{ url('movies?page=' . $i .
-                            '&language=' . (is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) .
-                            '&sort=' . (is_array($sort) ? implode(',', $sort) : $sort) .
-                            '&genre=' . (is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre)) }}">
+                                                    href="{{ url('movies?p=' . $i .
+                            '&l=' . (is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) .
+                            '&s=' . (is_array($sort) ? implode(',', $sort) : $sort) .
+                            '&g=' . (is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre)) }}">
                                                     {{ $i }}
                                                 </a>
                                             </li>
@@ -205,13 +214,13 @@
             <!-- Jump to Page Form -->
             <div class="d-flex justify-content-center mt-3 mb-3">
                 <form action="{{ url('movies') }}" method="get" class="form-inline">
-                    <input type="hidden" name="language"
+                    <input type="hidden" name="l"
                         value="{{ htmlspecialchars(is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) }}">
-                    <input type="hidden" name="sort" value="{{ htmlspecialchars($sort) }}">
-                    <input type="hidden" name="genre"
+                    <input type="hidden" name="s" value="{{ htmlspecialchars($sort) }}">
+                    <input type="hidden" name="g"
                         value="{{ htmlspecialchars(is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre) }}">
                     <label for="jumpToPage" class="mr-2 text-light fw-bold">Jump to Page:</label>
-                    <input type="number" id="jumpToPage" name="page" class="form-control" min="1"
+                    <input type="number" id="jumpToPage" name="p" class="form-control" min="1"
                         max="{{ $totalPages }}" value="{{ $currentPage }}">
                     <button type="submit" class="btn btn-primary ml-2">Go</button>
                 </form>

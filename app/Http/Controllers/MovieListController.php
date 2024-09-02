@@ -38,14 +38,14 @@ class MovieListController extends Controller
 
         return json_decode($response->getBody(), true);
     }
-
+    //total movies lists for all languages
     public function moviesList(Request $request)
     {
-        $moviesPerPage = 8;
-        $sort = $request->query('sort', 'popularity.desc');
-        $selectedLanguage = $request->query('language', 'en');
-        $selectedGenre = $request->query('genre', []);
-        $page = $request->query('page', 1);
+        $moviesPerPage = 20;
+        $sort = $request->query('s', 'popularity.desc');
+        $selectedLanguage = $request->query('l', 'en');
+        $selectedGenre = $request->query('g', []);
+        $page = $request->query('p', 1);
 
         // Ensure selectedGenre is an array
         if (is_string($selectedGenre)) {
@@ -133,15 +133,10 @@ class MovieListController extends Controller
         ]);
     }
 
-
-
-
-
-
-
+    //world popular movies list
     public function wpmoviesList(Request $request)
     {
-        $moviesPerPage = 8;
+        $moviesPerPage = 20;
         $page = $request->query('page', 1);
 
         $data = $this->fetchMoviesWithPagination('https://api.themoviedb.org/3/movie/popular', $page, [
@@ -158,10 +153,10 @@ class MovieListController extends Controller
             'moviesPerPage' => $moviesPerPage,
         ]);
     }
-
+    //top rated movies list
     public function trmoviesList(Request $request)
     {
-        $moviesPerPage = 8;
+        $moviesPerPage = 20;
         $page = $request->query('page', 1);
 
         $data = $this->fetchMoviesWithPagination('https://api.themoviedb.org/3/movie/top_rated', $page, [
@@ -179,28 +174,37 @@ class MovieListController extends Controller
             'moviesPerPage' => $moviesPerPage,
         ]);
     }
-
+    //telugu popular movies list
     public function tpmoviesList(Request $request)
     {
-        $moviesPerPage = 8;
+        $moviesPerPage = 20;
         $page = $request->query('page', 1);
 
-        $data = $this->fetchMoviesWithPagination('https://api.themoviedb.org/3/discover/movie', $page, [
-            'sort_by' => 'popularity.desc',
-            'language' => 'en-US',
-            'region' => 'IN',
-            'with_original_language' => 'te',
+        $response = $this->client->request('GET', 'https://api.themoviedb.org/3/discover/movie', [
+            'query' => [
+                'api_key' => $this->apiKey,
+                'sort_by' => 'popularity.desc',
+                'language' => 'en-US',
+                'region' => 'IN',
+                'with_original_language' => 'te',
+                'page' => $page,
+            ],
         ]);
 
+        // Decode the JSON response to an associative array
+        $data = json_decode($response->getBody(), true);
+
+        // Now you can access the data as an array
         $movies = $data['results'];
         $totalMovies = $data['total_results'];
         $totalPages = ceil($totalMovies / $moviesPerPage);
 
-        return view('lists/telugu_pml', [
+        return view('lists.telugu_pml', [
             'movies' => $movies,
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'moviesPerPage' => $moviesPerPage,
         ]);
+
     }
 }
