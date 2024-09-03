@@ -20,3 +20,11 @@ function animeBlankPoster($posterPath)
     $defaultImage = asset('images/blank_poster.jpg'); // Replace with the
     return $posterPath ? $posterPath : $defaultImage;
 }
+
+function blankProfile($posterPath)
+{
+    $baseUrl = 'https://image.tmdb.org/t/p/w500';
+    $defaultImage = asset('images/blank_profile.png'); // Replace with the actual path to your default image
+
+    return $posterPath ? $baseUrl . $posterPath : $defaultImage;
+}

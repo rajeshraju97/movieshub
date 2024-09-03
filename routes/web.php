@@ -15,8 +15,9 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('/movies', [MovieListController::class, 'moviesList'])->name('movies.list');
 Route::get('/movies/wpml', [MovieListController::class, 'wpmoviesList'])->name('wpmovies.list');
 Route::get('/movies/trml', [MovieListController::class, 'trmoviesList'])->name('trmovies.list');
-
 Route::get('/movies/tpml', [MovieListController::class, 'tpmoviesList'])->name('tpmovies.list');
+//for the single page movies view
+Route::get('/movies/{movie}', [SinglePageController::class, 'singleMovie'])->name('single.movie');
 
 
 

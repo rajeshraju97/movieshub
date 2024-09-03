@@ -71,8 +71,41 @@
         });
     };
 
+    var movie_cast = function () {
+        $(".movie_cast").owlCarousel({
+            loop: true,
+            autoplay: true,
+            margin: 10,
+            animateOut: "fadeOut",
+            animateIn: "fadeIn",
+            nav: true,
+            dots: false,
+            autoplayHoverPause: false,
+            items: 8,
+            navText: [
+                "<span class='ion-ios-arrow-back'></span>",
+                "<span class='ion-ios-arrow-forward'></span>",
+            ],
+            responsive: {
+                0: {
+                    items: 2,
+                },
+                600: {
+                    items: 7,
+                },
+                1000: {
+                    items: 8,
+                },
+                1200: {
+                    items: 10,
+                },
+            },
+        });
+    };
+
     carousel();
     now_playing();
+    movie_cast();
 })(jQuery);
 
 $(document).ready(function () {
@@ -81,4 +114,3 @@ $(document).ready(function () {
         allowClear: true,
     });
 });
-
