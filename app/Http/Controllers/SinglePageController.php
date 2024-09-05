@@ -19,23 +19,6 @@ class SinglePageController extends Controller
     }
 
 
-    private function fetchGenreMap()
-    {
-        $response = $this->client->request('GET', 'https://api.themoviedb.org/3/genre/movie/list', [
-            'query' => ['api_key' => $this->apiKey],
-        ]);
-
-        $genres = json_decode($response->getBody(), true)['genres'];
-
-        // Map Genre IDs to Names
-        $genreMap = [];
-        foreach ($genres as $genre) {
-            $genreMap[$genre['id']] = $genre['name'];
-        }
-
-        return $genreMap;
-    }
-
     public function singleMovie($id)
     {
 
@@ -54,17 +37,71 @@ class SinglePageController extends Controller
         ]);
 
 
+        $videos = $this->client->request('GET', 'https://api.themoviedb.org/3/movie/' . $id . '/videos' . '?' . $this->apiKey, [
+            'headers' => [
+                'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmN2Y4N2QyNTU2OTY5ZjlmNWQ5NjUzM2RkN2E0MjVkMSIsIm5iZiI6MTcyNDM5NDA2Mi42NTIxMDEsInN1YiI6IjY0MzNiMGUwOWE2NDM1MDY4OTQ4ZjEyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kv9n-HyuVbEVVoIf9G0X8TMoc8QBIPFKPxqC1wDIID0',
+                'accept' => 'application/json',
+            ],
+        ]);
+
+
+
 
 
 
         $movie = json_decode($data->getBody(), true);
         $credits = json_decode($credits->getBody(), true);
-        
+        $videos = json_decode($videos->getBody(), true)['results'];
+
 
         $casts = $credits['cast'];
         $crews = $credits['crew'];
 
         // echo $movie;
-        return view('single_pages.movie_single_page', compact('movie', 'casts', 'crews'));
+        return view('single_pages.movie_single_page', compact('movie', 'casts', 'crews', 'videos'));
+    }
+
+
+    public function singleTvSeries($id)
+    {
+
+
+        $data = $this->client->request('GET', 'https://api.themoviedb.org/3/tv/' . $id . '?' . $this->apiKey, [
+            'headers' => [
+                'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmN2Y4N2QyNTU2OTY5ZjlmNWQ5NjUzM2RkN2E0MjVkMSIsIm5iZiI6MTcyNDM5NDA2Mi42NTIxMDEsInN1YiI6IjY0MzNiMGUwOWE2NDM1MDY4OTQ4ZjEyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kv9n-HyuVbEVVoIf9G0X8TMoc8QBIPFKPxqC1wDIID0',
+                'accept' => 'application/json',
+            ],
+        ]);
+
+        $credits = $this->client->request('GET', 'https://api.themoviedb.org/3/tv/' . $id . '/credits' . '?' . $this->apiKey, [
+            'headers' => [
+                'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmN2Y4N2QyNTU2OTY5ZjlmNWQ5NjUzM2RkN2E0MjVkMSIsIm5iZiI6MTcyNDM5NDA2Mi42NTIxMDEsInN1YiI6IjY0MzNiMGUwOWE2NDM1MDY4OTQ4ZjEyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kv9n-HyuVbEVVoIf9G0X8TMoc8QBIPFKPxqC1wDIID0',
+                'accept' => 'application/json',
+            ],
+        ]);
+
+        $videos = $this->client->request('GET', 'https://api.themoviedb.org/3/tv/' . $id . '/videos' . '?' . $this->apiKey, [
+            'headers' => [
+                'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmN2Y4N2QyNTU2OTY5ZjlmNWQ5NjUzM2RkN2E0MjVkMSIsIm5iZiI6MTcyNDM5NDA2Mi42NTIxMDEsInN1YiI6IjY0MzNiMGUwOWE2NDM1MDY4OTQ4ZjEyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kv9n-HyuVbEVVoIf9G0X8TMoc8QBIPFKPxqC1wDIID0',
+                'accept' => 'application/json',
+            ],
+        ]);
+
+
+
+
+
+
+
+        $tv_series = json_decode($data->getBody(), true);
+        $credits = json_decode($credits->getBody(), true);
+        $videos = json_decode($videos->getBody(), true)['results'];
+
+
+        $casts = $credits['cast'];
+        $crews = $credits['crew'];
+
+        // echo $movie;
+        return view('single_pages.tv_series_single_page', compact('tv_series', 'casts', 'crews', 'videos'));
     }
 }

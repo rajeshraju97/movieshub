@@ -114,3 +114,10 @@ $(document).ready(function () {
         allowClear: true,
     });
 });
+
+function loadVideo(element, videoKey) {
+    // Replace the thumbnail image with the iframe
+    element.innerHTML = `<iframe width="100%" height="315" src="https://www.youtube.com/embed/${videoKey}?autoplay=1"
+                         frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                         allowfullscreen></iframe>`;
+}

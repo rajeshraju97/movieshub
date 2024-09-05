@@ -72,7 +72,7 @@
                                 @endphp
                                 <div class="col-md-3 mb-4">
                                     <div class="text-light">
-                                        <a href="movies/{{$movie['id']}}">
+                                        <a href="movies/{{$movie['id']}}" class="text-light">
                                         <img src="{{ $posterUrl }}" alt="{{ $movie['title'] }} Poster" class="img-fluid w-60 p-2"
                                             style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
                                         <div class="card-body text-center">

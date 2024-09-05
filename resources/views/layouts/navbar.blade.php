@@ -19,21 +19,25 @@
                     <a class="nav-link text-light fs-5" aria-current="page" href="/">Home</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle fs-5" href="movies" role="button" data-bs-toggle="dropdown"
+                    <a class="nav-link dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         Movies
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="movies/wpml">World Popular Movies</a></li>
-                        <li><a class="dropdown-item" href="movies/trml">Top Rated Movies</a></li>
-                        <li><a class="dropdown-item" href="movies/tpml">Telugu Popular Movies</a></li>
+                        <li><a class="dropdown-item" href="{{ route('movies.list') }}">All Movies</a></li>
+                        <li><a class="dropdown-item" href="{{ route('wpmovies.list') }}">World Popular Movies</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{{ route('trmovies.list') }}">Top Rated Movies</a></li>
+                        <li><a class="dropdown-item" href="{{ route('tpmovies.list') }}">Telugu Popular
+                                Movies</a></li>
                     </ul>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link text-light fs-5" href="tv_series">Tv Series</a>
+                    <a class="nav-link text-light fs-5" href="{{route('tv.series.list')}}">Tv Series</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light fs-5" href="anime">Anime</a>
+                    <a class="nav-link text-light fs-5" href="{{route('anime.list')}}">Anime</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown"

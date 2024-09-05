@@ -18,11 +18,14 @@ Route::get('/movies/trml', [MovieListController::class, 'trmoviesList'])->name('
 Route::get('/movies/tpml', [MovieListController::class, 'tpmoviesList'])->name('tpmovies.list');
 //for the single page movies view
 Route::get('/movies/{movie}', [SinglePageController::class, 'singleMovie'])->name('single.movie');
+//for the single page tv series view
+Route::get('/tv_series/{series}', [SinglePageController::class, 'singleTvSeries'])->name('single.tvseries');
+
 
 
 
 // TV Series Routes
-Route::get('/tv_series', [TvSeriesListController::class, 'tvSeriesList'])->name('tv.series.list');
+Route::get('/tv_series/', [TvSeriesListController::class, 'tvSeriesList'])->name('tv.series.list');
 
 
 //for the anime

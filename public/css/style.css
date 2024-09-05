@@ -11232,3 +11232,31 @@ h5,
     -webkit-transform: scale(1.2);
     transform: scale(1.2);
 }
+
+/* //fo the video button play over the image  */
+.video-thumbnail {
+    position: relative;
+    cursor: pointer;
+}
+
+.video-thumb-img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.play-button-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.video-thumbnail:hover .play-button-overlay {
+    opacity: 0.6;
+}
