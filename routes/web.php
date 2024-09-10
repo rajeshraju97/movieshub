@@ -44,3 +44,6 @@ Route::get('/anime', [AnimeListController::class, 'animesList'])->name('anime.li
 Route::get('/anime/popular_anime', [AnimeListController::class, 'popular_anime'])->name('popular.anime.list');
 Route::get('/anime/upcoming_anime', [AnimeListController::class, 'upcoming_anime'])->name('upcoming.anime.list');
 
+//for watchlist
+
+Route::get('/watchlist', [WatchlistController::class, 'index'])->name('watchlist');
