@@ -3,14 +3,25 @@ namespace App\Http\Controllers;
 
 
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\TvSeriesListController;
 
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
+//for authentication purposes
+Auth::routes();
+
+Route::get('/register', [AuthController::class, 'index'])->name('regiser_page');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+// Movie Routes
 
 Route::get('/movies', [MovieListController::class, 'moviesList'])->name('movies.list');
 Route::get('/movies/wpml', [MovieListController::class, 'wpmoviesList'])->name('wpmovies.list');

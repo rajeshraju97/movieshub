@@ -27,7 +27,7 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent1" style="margin-right:5pc;">
 
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li class="nav-item">
@@ -60,28 +60,44 @@
                             <li class="nav-item">
                                 <a class="nav-link text-light fs-5" href="anime">Anime</a>
                             </li>
+                            <!-- Show Profile, Username, and Logout links if the user is authenticated -->
+                            @auth
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <!-- Display the username here -->
+                                        <i class="bi bi-person-circle"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">{{ auth()->user()->username }}</a></li>
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    <i class="bi bi-person-circle"></i>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Porifle</a></li>
-                                    <li><a class="dropdown-item" href="#">WatchList</a></li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" href="#">Logout</a></li>
+                                        <li><a class="dropdown-item" href="#">WatchList</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                Logout
+                                            </a>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                @csrf
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+                            @endauth
 
-                                </ul>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light fs-5" href="#">Signup</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light fs-5" href="#">Login</a>
-                            </li>
+                            <!-- Show Login and Signup links if the user is a guest -->
+                            @guest
+                                <li class="nav-item">
+                                    <a class="nav-link text-light fs-5" href="/register">Signup</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-light fs-5" href="/login">Login</a>
+                                </li>
+                            @endguest
+
 
                         </ul>
                     </div>
@@ -333,22 +349,22 @@
 
                     <h6 class="card-title">{{$title}}</h6>
                     <!-- <p><span style="color:#ffee00;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                                                                                                    fill="currentColor" class="bi bi-vignette" viewBox="0 0 16 16">
-                                                                                                                                    <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8" />
-                                                                                                                                    <path
-                                                                                                                                        d="M8.5 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 7a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m1.683-6.281a.5.5 0 1 1-.866-.5.5.5 0 0 1 .866.5m-3.5 6.062a.5.5 0 1 1-.866-.5.5.5 0 0 1 .866.5m4.598-4.598a.5.5 0 1 1-.5-.866.5.5 0 0 1 .5.866m-6.062 3.5a.5.5 0 1 1-.5-.866.5.5 0 0 1 .5.866M11.5 8.5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m-7 0a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m6.281 1.683a.5.5 0 1 1 .5-.866.5.5 0 0 1-.5.866m-6.062-3.5a.5.5 0 1 1 .5-.866.5.5 0 0 1-.5.866m4.598 4.598a.5.5 0 1 1 .866-.5.5.5 0 0 1-.866.5m-3.5-6.062a.5.5 0 1 1 .866-.5.5.5 0 0 1-.866.5" />
-                                                                                                                                </svg></span>&nbsp;{{$anime['status']}}</p>
-                                                                                                                        <p>&nbsp;&nbsp;&nbsp;{{$anime['aired']['string']}}</p> -->
+                                                                                                                                                                    fill="currentColor" class="bi bi-vignette" viewBox="0 0 16 16">
+                                                                                                                                                                    <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8" />
+                                                                                                                                                                    <path
+                                                                                                                                                                        d="M8.5 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 7a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m1.683-6.281a.5.5 0 1 1-.866-.5.5.5 0 0 1 .866.5m-3.5 6.062a.5.5 0 1 1-.866-.5.5.5 0 0 1 .866.5m4.598-4.598a.5.5 0 1 1-.5-.866.5.5 0 0 1 .5.866m-6.062 3.5a.5.5 0 1 1-.5-.866.5.5 0 0 1 .5.866M11.5 8.5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m-7 0a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m6.281 1.683a.5.5 0 1 1 .5-.866.5.5 0 0 1-.5.866m-6.062-3.5a.5.5 0 1 1 .5-.866.5.5 0 0 1-.5.866m4.598 4.598a.5.5 0 1 1 .866-.5.5.5 0 0 1-.866.5m-3.5-6.062a.5.5 0 1 1 .866-.5.5.5 0 0 1-.866.5" />
+                                                                                                                                                                </svg></span>&nbsp;{{$anime['status']}}</p>
+                                                                                                                                                        <p>&nbsp;&nbsp;&nbsp;{{$anime['aired']['string']}}</p> -->
 
                     <!-- <div class="star-rating">
-                                                                                                                            @for ($i = 0; $i < 5; $i++)
-                                                                                                                                @if ($i < $rating_out_of_five)
-                                                                                                                                    <i class="bi bi-star-fill text-warning"></i> 
-                                                                                                                                @else
-                                                                                                                                    <i class="bi bi-star text-warning"></i> 
-                                                                                                                                @endif
-                                                                                                                            @endfor
-                                                                                                                        </div> -->
+                                                                                                                                                            @for ($i = 0; $i < 5; $i++)
+                                                                                                                                                                @if ($i < $rating_out_of_five)
+                                                                                                                                                                    <i class="bi bi-star-fill text-warning"></i> 
+                                                                                                                                                                @else
+                                                                                                                                                                    <i class="bi bi-star text-warning"></i> 
+                                                                                                                                                                @endif
+                                                                                                                                                            @endfor
+                                                                                                                                                        </div> -->
                 </div>
             </div>
         </div>
