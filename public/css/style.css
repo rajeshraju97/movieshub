@@ -11037,6 +11037,8 @@ h5,
     padding-right: 40px;
     color: #fff;
     background-color: transparent; /* Make search bar transparent */
+    visibility: hidden; /* Hidden initially */
+    opacity: 0; /* Transparent initially */
 }
 
 .input-search::placeholder {
@@ -11057,14 +11059,26 @@ h5,
     border-radius: 50%;
     position: absolute;
     right: 0px;
-    pointer-events: painted;
     background-color: transparent; /* Transparent button */
     color: #fff; /* White icon color */
 }
 
-.btn-search:focus ~ .input-search,
+/* Hover effect: when hovering over the button, show the input */
+.search-box:hover .input-search {
+    width: 300px;
+    visibility: visible;
+    opacity: 1;
+    border-radius: 0px;
+    background-color: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+}
+
+/* When the input is focused, maintain its expanded state */
 .input-search:focus {
     width: 300px;
+    visibility: visible;
+    opacity: 1;
     border-radius: 0px;
     background-color: transparent;
     border-bottom: 1px solid rgba(255, 255, 255, 0.5);

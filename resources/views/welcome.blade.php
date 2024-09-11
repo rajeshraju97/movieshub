@@ -3,6 +3,9 @@
 
 
 
+
+
+
 <!-- //owl caurosel of the -->
 <div class="home-slider owl-carousel js-fullheight position-relative">
     @foreach ($nowPlayingMovies as $movie)
@@ -30,13 +33,19 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent1" style="margin-right:5pc;">
 
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <div class="search-box">
-                                    <button class="btn-search"><i class="bi bi-search"></i></button>
-                                    <input type="text" class="input-search" placeholder="Type to Search...">
-                                </div>
+                            @auth
+                                <li class="nav-item">
+                                    <div class="search-box">
+                                        <form action="{{route('search.multi')}}" method="post">
+                                            @csrf
+                                            <button type="button" class="btn-search"><i class="bi bi-search"></i></button>
+                                            <input type="text" class="input-search" name="search_query"
+                                                placeholder="Type to Search...">
+                                        </form>
+                                    </div>
+                                </li>
 
-                            </li>
+                            @endauth
                             <li class="nav-item">
                                 <a class="nav-link text-light fs-5" aria-current="page" href="/">Home</a>
                             </li>
@@ -47,10 +56,14 @@
                                     Movies
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="movies/wpml">World Popular Movies</a></li>
-                                    <li><a class="dropdown-item" href="movies/trml">Top Rated Movies</a></li>
-                                    <li><a class="dropdown-item" href="movies/tpml">Telugu Popular Movies</a></li>
-
+                                    <li><a class="dropdown-item" href="{{ route('movies.list') }}">All Movies</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('wpmovies.list') }}">World Popular
+                                            Movies</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="{{ route('trmovies.list') }}">Top Rated Movies</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="{{ route('tpmovies.list') }}">Telugu Popular
+                                            Movies</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item">
@@ -91,11 +104,9 @@
                             <!-- Show Login and Signup links if the user is a guest -->
                             @guest
                                 <li class="nav-item">
-                                    <a class="nav-link text-light fs-5" href="/register">Signup</a>
+                                    <a class="nav-link text-light fs-5" href="/register">Sign In/Up</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-light fs-5" href="/login">Login</a>
-                                </li>
+
                             @endguest
 
 
@@ -349,22 +360,22 @@
 
                     <h6 class="card-title">{{$title}}</h6>
                     <!-- <p><span style="color:#ffee00;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                                                                                                                                        fill="currentColor" class="bi bi-vignette" viewBox="0 0 16 16">
-                                                                                                                                                                        <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8" />
-                                                                                                                                                                        <path
-                                                                                                                                                                            d="M8.5 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 7a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m1.683-6.281a.5.5 0 1 1-.866-.5.5.5 0 0 1 .866.5m-3.5 6.062a.5.5 0 1 1-.866-.5.5.5 0 0 1 .866.5m4.598-4.598a.5.5 0 1 1-.5-.866.5.5 0 0 1 .5.866m-6.062 3.5a.5.5 0 1 1-.5-.866.5.5 0 0 1 .5.866M11.5 8.5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m-7 0a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m6.281 1.683a.5.5 0 1 1 .5-.866.5.5 0 0 1-.5.866m-6.062-3.5a.5.5 0 1 1 .5-.866.5.5 0 0 1-.5.866m4.598 4.598a.5.5 0 1 1 .866-.5.5.5 0 0 1-.866.5m-3.5-6.062a.5.5 0 1 1 .866-.5.5.5 0 0 1-.866.5" />
-                                                                                                                                                                    </svg></span>&nbsp;{{$anime['status']}}</p>
-                                                                                                                                                            <p>&nbsp;&nbsp;&nbsp;{{$anime['aired']['string']}}</p> -->
+                                                                                                                                                                                                                                            fill="currentColor" class="bi bi-vignette" viewBox="0 0 16 16">
+                                                                                                                                                                                                                                            <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8" />
+                                                                                                                                                                                                                                            <path
+                                                                                                                                                                                                                                                d="M8.5 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 7a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m1.683-6.281a.5.5 0 1 1-.866-.5.5.5 0 0 1 .866.5m-3.5 6.062a.5.5 0 1 1-.866-.5.5.5 0 0 1 .866.5m4.598-4.598a.5.5 0 1 1-.5-.866.5.5 0 0 1 .5.866m-6.062 3.5a.5.5 0 1 1-.5-.866.5.5 0 0 1 .5.866M11.5 8.5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m-7 0a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m6.281 1.683a.5.5 0 1 1 .5-.866.5.5 0 0 1-.5.866m-6.062-3.5a.5.5 0 1 1 .5-.866.5.5 0 0 1-.5.866m4.598 4.598a.5.5 0 1 1 .866-.5.5.5 0 0 1-.866.5m-3.5-6.062a.5.5 0 1 1 .866-.5.5.5 0 0 1-.866.5" />
+                                                                                                                                                                                                                                        </svg></span>&nbsp;{{$anime['status']}}</p>
+                                                                                                                                                                                                                                <p>&nbsp;&nbsp;&nbsp;{{$anime['aired']['string']}}</p> -->
 
                     <!-- <div class="star-rating">
-                                                                                                                                                                @for ($i = 0; $i < 5; $i++)
-                                                                                                                                                                    @if ($i < $rating_out_of_five)
-                                                                                                                                                                        <i class="bi bi-star-fill text-warning"></i> 
-                                                                                                                                                                    @else
-                                                                                                                                                                        <i class="bi bi-star text-warning"></i> 
-                                                                                                                                                                    @endif
-                                                                                                                                                                @endfor
-                                                                                                                                                            </div> -->
+                                                                                                                                                                                                                                    @for ($i = 0; $i < 5; $i++)
+                                                                                                                                                                                                                                        @if ($i < $rating_out_of_five)
+                                                                                                                                                                                                                                            <i class="bi bi-star-fill text-warning"></i> 
+                                                                                                                                                                                                                                        @else
+                                                                                                                                                                                                                                            <i class="bi bi-star text-warning"></i> 
+                                                                                                                                                                                                                                        @endif
+                                                                                                                                                                                                                                    @endfor
+                                                                                                                                                                                                                                </div> -->
                 </div>
             </div>
         </div>

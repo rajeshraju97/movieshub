@@ -9,12 +9,17 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent1" style="margin-right: 5pc;">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <div class="search-box">
-                        <button class="btn-search"><i class="bi bi-search"></i></button>
-                        <input type="text" class="input-search" placeholder="Type to Search...">
-                    </div>
-                </li>
+                @auth
+                    <li class="nav-item">
+                        <div class="search-box">
+                            <form action="{{route('search.multi')}}" method="post">
+                                @csrf
+                                <button type="button" class="btn-search"><i class="bi bi-search"></i></button>
+                                <input type="text" class="input-search" name="search_query" placeholder="Type to Search...">
+                            </form>
+                        </div>
+                    </li>
+                @endauth
                 <li class="nav-item">
                     <a class="nav-link text-light fs-5" aria-current="page" href="/">Home</a>
                 </li>
@@ -70,11 +75,9 @@
                 <!-- Show Login and Signup links if the user is a guest -->
                 @guest
                     <li class="nav-item">
-                        <a class="nav-link text-light fs-5" href="/register">Signup</a>
+                        <a class="nav-link text-light fs-5" href="/register">Sign In/Up</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-light fs-5" href="/login">Login</a>
-                    </li>
+
                 @endguest
 
 

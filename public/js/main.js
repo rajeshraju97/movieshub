@@ -18,7 +18,8 @@
             animateIn: "fadeIn",
             nav: true,
             dots: true,
-            autoplayHoverPause: false,
+            autoplayTimeout: 2000, // Time interval between each image (5 seconds)
+            autoplayHoverPause: true, // Stop autoplay on hover
             items: 1,
             navText: [
                 "<span class='ion-ios-arrow-back'></span>",

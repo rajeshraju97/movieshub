@@ -12,6 +12,8 @@ use App\Http\Controllers\TvSeriesListController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
+
+
 //for authentication purposes
 Auth::routes();
 
@@ -20,6 +22,14 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+
+//for search
+Route::post('/search', [SearchController::class, 'index'])->name('search.multi');
+Route::get('/search', [SearchController::class, 'index'])->name('search.multi');
+
+
+
+// for watchlist
 
 // Movie Routes
 
