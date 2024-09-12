@@ -4,6 +4,9 @@
 <!-- Navbar Inside Each Carousel Slide -->
 @include('layouts.navbar')
 
+
+
+
 <div class="container col-md-12" style="margin-top:7rem !important;">
     <h1 class="mb-4 text-center text-light">Movie List</h1>
     <div class="row">
@@ -69,102 +72,114 @@
                                 @php
                                     $rating_out_of_five = round($movie['vote_average'] / 2);
                                     $posterUrl = blankPoster($movie['poster_path']);
+                                    $isInWatchlist = $watchlistItems->contains($movie['id']);
                                 @endphp
                                 <div class="col-md-3 mb-4">
                                     <div class="text-light">
                                         <a href="movies/{{$movie['id']}}" class="text-light">
-                                        <img src="{{ $posterUrl }}" alt="{{ $movie['title'] }} Poster" class="img-fluid w-60 p-2"
-                                            style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
-                                        <div class="card-body text-center">
-                                            <h5 class="card-title">{{ limitWords($movie['title'], 1) }}</h5>
-                                            <p><i class="bi bi-calendar-event"
-                                                    style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
-                                            <div class="star-rating">
-                                                @for ($i = 0; $i < 5; $i++)
-                                                    @if ($i < $rating_out_of_five)
-                                                        <i class="bi bi-star-fill text-warning"></i> <!-- Filled star -->
-                                                    @else
-                                                        <i class="bi bi-star text-warning"></i> <!-- Empty star -->
-                                                    @endif
-                                                @endfor
-                                            </div>
-                                        </div>
+                                            <img src="{{ $posterUrl }}" alt="{{ $movie['title'] }} Poster" class="img-fluid w-60 p-2"
+                                                style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                                            <div class="card-body text-center">
+                                                <h5 class="card-title">{{ limitWords($movie['title'], 1) }}</h5>
+                                                <p><i class="bi bi-calendar-event"
+                                                        style="color:#ffee00;"></i>&nbsp;{{$movie['release_date']}}</p>
+                                                <div class="star-rating">
+                                                    @for ($i = 0; $i < 5; $i++)
+                                                        @if ($i < $rating_out_of_five)
+                                                            <i class="bi bi-star-fill text-warning"></i> <!-- Filled star -->
+                                                        @else
+                                                            <i class="bi bi-star text-warning"></i> <!-- Empty star -->
+                                                        @endif
+                                                    @endfor
+                                                </div>
                                         </a>
+                                        @auth
+                                            <form action="{{ route('watchlist') }}" method="POST" style="display: inline;">
+                                                @csrf
+                                                <input type="hidden" name="movie_id" value="{{ $movie['id'] }}">
+                                                <input type="hidden" name="action" value="{{ $isInWatchlist ? 'remove' : 'add' }}">
+                                                <button type="submit" style="border: none; background: none; padding: 0; cursor: pointer;">
+                                                    <i class="bi {{ $isInWatchlist ? 'bi-suit-heart-fill' : 'bi-suit-heart' }}"
+                                                        style="color: {{ $isInWatchlist ? 'red' : '#ffee00' }}; font-size: 27px;"
+                                                        title="{{ $isInWatchlist ? 'Added to watchlist' : 'Add to watchlist' }}"></i>
+                                                </button>
+                                            </form>
+                                        @endauth
+
                                     </div>
+
                                 </div>
+                            </div>
                 @endforeach
-            </div>
+        </div>
 
-            <!-- Pagination Links -->
-            <div class="d-flex justify-content-center">
-                <nav>
-                    <ul class="pagination">
-                        @if ($currentPage > 1)
-                                            <li class="page-item @if ($i == $currentPage) active @endif">
-                                                <a class="page-link"
-                                                    href="{{ url('movies?p=' . $i .
-                            '&l=' . (is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) .
-                            '&s=' . (is_array($sort) ? implode(',', $sort) : $sort) .
-                            '&g=' . (is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre)) }}">
-                                                    {{ $i }}
-                                                </a>
-                                            </li>
-                        @endif
+        <!-- Pagination Links -->
+        <div class="d-flex justify-content-center">
+            <nav>
+                <ul class="pagination">
+                    @if ($currentPage > 1)
+                                    <li class="page-item @if ($i == $currentPage) active @endif">
+                                        <a class="page-link" href="{{ url('movies?p=' . $i .
+                        '&l=' . (is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) .
+                        '&s=' . (is_array($sort) ? implode(',', $sort) : $sort) .
+                        '&g=' . (is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre)) }}">
+                                            {{ $i }}
+                                        </a>
+                                    </li>
+                    @endif
 
-                        @php
-                            $startPage = max(1, $currentPage - 5); // Adjust this to control the range of pages shown
-                            $endPage = min($totalPages, $currentPage + 4); // Show 10 pages at most
-                        @endphp
+                    @php
+                        $startPage = max(1, $currentPage - 5); // Adjust this to control the range of pages shown
+                        $endPage = min($totalPages, $currentPage + 4); // Show 10 pages at most
+                    @endphp
 
-                        @for ($i = $startPage; $i <= $endPage; $i++)
-                                            <li class="page-item @if ($i == $currentPage) active @endif">
-                                                <a class="page-link"
-                                                    href="{{ url('movies?p=' . $i .
-                            '&l=' . (is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) .
-                            '&s=' . (is_array($sort) ? implode(',', $sort) : $sort) .
-                            '&g=' . (is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre)) }}">
-                                                    {{ $i }}
-                                                </a>
-                                            </li>
-                        @endfor
+                    @for ($i = $startPage; $i <= $endPage; $i++)
+                                    <li class="page-item @if ($i == $currentPage) active @endif">
+                                        <a class="page-link" href="{{ url('movies?p=' . $i .
+                        '&l=' . (is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) .
+                        '&s=' . (is_array($sort) ? implode(',', $sort) : $sort) .
+                        '&g=' . (is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre)) }}">
+                                            {{ $i }}
+                                        </a>
+                                    </li>
+                    @endfor
 
-                        @if ($currentPage < $totalPages)
-                                            <li class="page-item">
-                                                <a class="page-link"
-                                                    href="{{ url('movies?p=' . $i .
-                            '&l=' . (is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) .
-                            '&s=' . (is_array($sort) ? implode(',', $sort) : $sort) .
-                            '&g=' . (is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre)) }}">
-                                                    {{ $i }}
-                                                </a>
-                                            </li>
-                        @endif
-                    </ul>
-                </nav>
-                <br>
-
-            </div>
-
-            <!-- Jump to Page Form -->
-            <div class="d-flex justify-content-center mt-3 mb-3">
-                <form action="{{ url('movies') }}" method="get" class="form-inline">
-                    <input type="hidden" name="l"
-                        value="{{ htmlspecialchars(is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) }}">
-                    <input type="hidden" name="s" value="{{ htmlspecialchars($sort) }}">
-                    <input type="hidden" name="g"
-                        value="{{ htmlspecialchars(is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre) }}">
-                    <label for="jumpToPage" class="mr-2 text-light fw-bold">Jump to Page:</label>
-                    <input type="number" id="jumpToPage" name="p" class="form-control" min="1"
-                        max="{{ $totalPages }}" value="{{ $currentPage }}">
-                    <button type="submit" class="btn btn-primary ml-2">Go</button>
-                </form>
-            </div>
-
-            <p class=" text-center text-light"><span class="fw-bold">Total Pages:</span>{{$totalPages}}</p>
-
+                    @if ($currentPage < $totalPages)
+                                    <li class="page-item">
+                                        <a class="page-link" href="{{ url('movies?p=' . $i .
+                        '&l=' . (is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) .
+                        '&s=' . (is_array($sort) ? implode(',', $sort) : $sort) .
+                        '&g=' . (is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre)) }}">
+                                            {{ $i }}
+                                        </a>
+                                    </li>
+                    @endif
+                </ul>
+            </nav>
+            <br>
 
         </div>
+
+        <!-- Jump to Page Form -->
+        <div class="d-flex justify-content-center mt-3 mb-3">
+            <form action="{{ url('movies') }}" method="get" class="form-inline">
+                <input type="hidden" name="l"
+                    value="{{ htmlspecialchars(is_array($selectedLanguage) ? implode(',', $selectedLanguage) : $selectedLanguage) }}">
+                <input type="hidden" name="s" value="{{ htmlspecialchars($sort) }}">
+                <input type="hidden" name="g"
+                    value="{{ htmlspecialchars(is_array($selectedGenre) ? implode(',', $selectedGenre) : $selectedGenre) }}">
+                <label for="jumpToPage" class="mr-2 text-light fw-bold">Jump to Page:</label>
+                <input type="number" id="jumpToPage" name="p" class="form-control" min="1" max="{{ $totalPages }}"
+                    value="{{ $currentPage }}">
+                <button type="submit" class="btn btn-primary ml-2">Go</button>
+            </form>
+        </div>
+
+        <p class=" text-center text-light"><span class="fw-bold">Total Pages:</span>{{$totalPages}}</p>
+
+
     </div>
+</div>
 
 </div>
 <!-- Initialize select2 -->

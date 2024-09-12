@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Watchlist;
 use GuzzleHttp\Client;
+
 
 class HomeController extends Controller
 {
@@ -14,10 +16,21 @@ class HomeController extends Controller
     {
         $this->client = new Client();
     }
-
-    public function index()
+    public function index(Request $request)
     {
-        // Fetch movies
+        // Check if the user is authenticated
+        if ($request->user()) {
+            $userId = $request->user()->id;
+
+            // Fetch the watchlist for authenticated users for both movies and anime
+            $watchlistItems = Watchlist::where('user_id', $userId)
+                ->pluck('movie_id') // pluck movie ids first
+                ->merge(Watchlist::where('user_id', $userId)->pluck('anime_id')); // merge anime ids into the collection
+        } else {
+            $watchlistItems = collect(); // Empty collection for unauthenticated users
+        }
+
+        // Fetch movies and pass to view
         $nowPlayingMovies = $this->fetchMovies('now_playing', 'IN');
         $popularWorldMovies = $this->fetchMovies('popular');
         $popularTeluguMovies = $this->fetchMovies('popular', 'IN', 'te');
@@ -26,10 +39,19 @@ class HomeController extends Controller
         $popularAnime = $this->fetchAnime('bypopularity');
         $upcomingAnime = $this->fetchAnime('upcoming');
 
-
-        // Pass movies with genres to the view
-        return view('welcome', compact('nowPlayingMovies', 'popularWorldMovies', 'popularTeluguMovies', 'topRatedMovies', 'upcomingMovies', 'popularAnime', 'upcomingAnime'));
+        // Pass movies, anime, and watchlist status to the view
+        return view('welcome', compact(
+            'nowPlayingMovies',
+            'popularWorldMovies',
+            'popularTeluguMovies',
+            'topRatedMovies',
+            'upcomingMovies',
+            'popularAnime',
+            'upcomingAnime',
+            'watchlistItems'
+        ));
     }
+
 
     private function fetchMovies($type, $region = null, $language = null)
     {

@@ -14,6 +14,7 @@
                 @php
                     $rating_out_of_five = round($movie['vote_average'] / 2);
                     $posterUrl = blankPoster($movie['poster_path']);
+                    $isInWatchlist = $watchlistItems->contains($movie['id']);
                 @endphp
                 <div class="col-md-3 mb-4">
                     <div class="text-light">
@@ -33,53 +34,66 @@
                                         @endif
                                     @endfor
                                 </div>
-                            </div>
                         </a>
+                        @auth
+                            <form action="{{ route('watchlist') }}" method="POST" style="display: inline;">
+                                @csrf
+                                <input type="hidden" name="movie_id" value="{{ $movie['id'] }}">
+                                <input type="hidden" name="action" value="{{ $isInWatchlist ? 'remove' : 'add' }}">
+                                <button type="submit" style="border: none; background: none; padding: 0; cursor: pointer;">
+                                    <i class="bi {{ $isInWatchlist ? 'bi-suit-heart-fill' : 'bi-suit-heart' }}"
+                                        style="color: {{ $isInWatchlist ? 'red' : '#ffee00' }}; font-size: 27px;"
+                                        title="{{ $isInWatchlist ? 'Added to watchlist' : 'Add to watchlist' }}"></i>
+                                </button>
+                            </form>
+                        @endauth
                     </div>
+
                 </div>
+            </div>
         @endforeach
-    </div>
+</div>
 
-    <!-- Pagination Links -->
-    <div class="d-flex justify-content-center">
-        <nav>
-            <ul class="pagination">
-                @if ($currentPage > 1)
-                    <li class="page-item">
-                        <a class="page-link" href="{{ url('movies/wpml?page=' . ($currentPage - 1)) }}">Previous</a>
-                    </li>
-                @endif
+<!-- Pagination Links -->
+<div class="d-flex justify-content-center">
+    <nav>
+        <ul class="pagination">
+            @if ($currentPage > 1)
+                <li class="page-item">
+                    <a class="page-link" href="{{ url('movies/wpml?page=' . ($currentPage - 1)) }}">Previous</a>
+                </li>
+            @endif
 
-                <!-- Show Pagination Links Dynamically -->
-                @php
-                    $startPage = max(1, $currentPage - 5); // Adjust this to control the range of pages shown
-                    $endPage = min($totalPages, $currentPage + 4); // Show 10 pages at most
-                @endphp
+            <!-- Show Pagination Links Dynamically -->
+            @php
+                $startPage = max(1, $currentPage - 5); // Adjust this to control the range of pages shown
+                $endPage = min($totalPages, $currentPage + 4); // Show 10 pages at most
+            @endphp
 
-                @for ($i = $startPage; $i <= $endPage; $i++)
-                    <li class="page-item @if ($i == $currentPage) active @endif">
-                        <a class="page-link" href="{{ url('movies/wpml?page=' . $i) }}">{{ $i }}</a>
-                    </li>
-                @endfor
+            @for ($i = $startPage; $i <= $endPage; $i++)
+                <li class="page-item @if ($i == $currentPage) active @endif">
+                    <a class="page-link" href="{{ url('movies/wpml?page=' . $i) }}">{{ $i }}</a>
+                </li>
+            @endfor
 
-                @if ($currentPage < $totalPages)
-                    <li class="page-item">
-                        <a class="page-link" href="{{ url('movies/wpml?page=' . ($currentPage + 1)) }}">Next</a>
-                    </li>
-                @endif
-            </ul>
-        </nav>
-    </div>
-    <!-- Jump to Page Form -->
-    <div class="d-flex justify-content-center mt-3">
-        <form action="{{ url('movies/wpml') }}" method="get" class="form-inline">
-            <label for="jumpToPage" class="mr-2 text-light fw-bold">Jump to Page:</label>
-            <input type="number" id="jumpToPage" name="page" class="form-control" min="1" max="{{ $totalPages }}"
-                value="{{ $currentPage }}">
-            <button type="submit" class="btn btn-primary ml-2">Go</button>
-        </form>
-    </div>
-    <p class="text-center text-light"><span class="fw-bold">Total Pages:</span> {{$totalPages}}</p>
+            @if ($currentPage < $totalPages)
+                <li class="page-item">
+                    <a class="page-link" href="{{ url('movies/wpml?page=' . ($currentPage + 1)) }}">Next</a>
+                </li>
+            @endif
+        </ul>
+    </nav>
+</div>
+<!-- Jump to Page Form -->
+<div class="d-flex justify-content-center mt-3">
+    <form action="{{ url('movies/wpml') }}" method="get" class="form-inline">
+        <label for="jumpToPage" class="mr-2 text-light fw-bold">Jump to Page:</label>
+        <input type="number" id="jumpToPage" name="page" class="form-control" min="1" max="{{ $totalPages }}"
+            value="{{ $currentPage }}">
+        <button type="submit" class="btn btn-primary ml-2">Go</button>
+    </form>
+</div>
+<p class="text-center text-light"><span class="fw-bold">Total Pages:</span> {{$totalPages}}</p>
 </div>
 
 

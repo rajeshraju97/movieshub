@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
+use App\Models\Watchlist;
 
 class TvSeriesListController extends Controller
 {
@@ -43,6 +44,18 @@ class TvSeriesListController extends Controller
 
     public function tvSeriesList(Request $request)
     {
+
+        if ($request->user()) {
+            $userId = $request->user()->id;
+
+            // Fetch the watchlist for authenticated users for both movies and anime
+            $watchlistItems = Watchlist::where('user_id', $userId)
+                ->pluck('tv_series_id') // pluck movie ids first
+                ->merge(Watchlist::where('user_id', $userId)->pluck('anime_id')); // merge anime ids into the collection
+        } else {
+            $watchlistItems = collect(); // Empty collection for unauthenticated users
+        }
+
         // Define the number of TV series per page
         $seriesPerPage = 20;
 
@@ -140,6 +153,7 @@ class TvSeriesListController extends Controller
             'languageCounts' => $languageCounts,
             'genres' => $genres,
             'selectedGenre' => $selectedGenre,
+            'watchlistItems' => $watchlistItems,
         ]);
     }
 

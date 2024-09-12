@@ -122,3 +122,18 @@ function loadVideo(element, videoKey) {
                          frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                          allowfullscreen></iframe>`;
 }
+
+// Automatically hide the flash message after 5 seconds (5000ms)
+setTimeout(function () {
+    let flashMessage = document.getElementById("flash-message");
+    if (flashMessage) {
+        // Fade out effect for better user experience
+        flashMessage.classList.remove("show");
+        flashMessage.classList.add("fade");
+
+        // After fade transition, completely hide it
+        setTimeout(function () {
+            flashMessage.style.display = "none";
+        }, 1000); // This gives 1 second for the fade-out effect
+    }
+}, 2000); // 5000ms = 5 seconds

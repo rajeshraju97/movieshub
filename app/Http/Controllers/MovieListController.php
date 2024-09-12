@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
-
+use App\Models\Watchlist;
 class MovieListController extends Controller
 {
     private $client;
@@ -41,6 +41,18 @@ class MovieListController extends Controller
     //total movies lists for all languages
     public function moviesList(Request $request)
     {
+        if ($request->user()) {
+            $userId = $request->user()->id;
+
+            // Fetch the watchlist for authenticated users for both movies and anime
+            $watchlistItems = Watchlist::where('user_id', $userId)
+                ->pluck('movie_id') // pluck movie ids first
+                ->merge(Watchlist::where('user_id', $userId)->pluck('anime_id')); // merge anime ids into the collection
+        } else {
+            $watchlistItems = collect(); // Empty collection for unauthenticated users
+        }
+
+
         $moviesPerPage = 20;
         $sort = $request->query('s', 'popularity.desc');
         $selectedLanguage = $request->query('l', 'en');
@@ -130,12 +142,26 @@ class MovieListController extends Controller
             'selectedGenre' => $selectedGenre,
             'languageCounts' => $languageCounts,
             'genres' => $genres,
+            'watchlistItems' => $watchlistItems,
         ]);
     }
 
     //world popular movies list
     public function wpmoviesList(Request $request)
     {
+
+        if ($request->user()) {
+            $userId = $request->user()->id;
+
+            // Fetch the watchlist for authenticated users for both movies and anime
+            $watchlistItems = Watchlist::where('user_id', $userId)
+                ->pluck('movie_id') // pluck movie ids first
+                ->merge(Watchlist::where('user_id', $userId)->pluck('anime_id')); // merge anime ids into the collection
+        } else {
+            $watchlistItems = collect(); // Empty collection for unauthenticated users
+        }
+
+
         $moviesPerPage = 20;
         $page = $request->query('page', 1);
 
@@ -151,11 +177,25 @@ class MovieListController extends Controller
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'moviesPerPage' => $moviesPerPage,
+            'watchlistItems' => $watchlistItems,
         ]);
     }
     //top rated movies list
     public function trmoviesList(Request $request)
     {
+
+        if ($request->user()) {
+            $userId = $request->user()->id;
+
+            // Fetch the watchlist for authenticated users for both movies and anime
+            $watchlistItems = Watchlist::where('user_id', $userId)
+                ->pluck('movie_id') // pluck movie ids first
+                ->merge(Watchlist::where('user_id', $userId)->pluck('anime_id')); // merge anime ids into the collection
+        } else {
+            $watchlistItems = collect(); // Empty collection for unauthenticated users
+        }
+
+
         $moviesPerPage = 20;
         $page = $request->query('page', 1);
 
@@ -172,11 +212,24 @@ class MovieListController extends Controller
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'moviesPerPage' => $moviesPerPage,
+            'watchlistItems' => $watchlistItems,
         ]);
     }
     //telugu popular movies list
     public function tpmoviesList(Request $request)
     {
+
+        if ($request->user()) {
+            $userId = $request->user()->id;
+
+            // Fetch the watchlist for authenticated users for both movies and anime
+            $watchlistItems = Watchlist::where('user_id', $userId)
+                ->pluck('movie_id') // pluck movie ids first
+                ->merge(Watchlist::where('user_id', $userId)->pluck('anime_id')); // merge anime ids into the collection
+        } else {
+            $watchlistItems = collect(); // Empty collection for unauthenticated users
+        }
+
         $moviesPerPage = 20;
         $page = $request->query('page', 1);
 
@@ -204,6 +257,7 @@ class MovieListController extends Controller
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'moviesPerPage' => $moviesPerPage,
+            'watchlistItems' => $watchlistItems,
         ]);
 
     }
