@@ -24,27 +24,26 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 
+
 </head>
 
 <body>
     @yield('content')
     <style>
-        /* Optional: Custom CSS for better design */
         #flash-message {
             position: fixed;
             top: 10px;
-            /* Adjust top position */
             right: 10px;
-            /* Adjust right position */
             z-index: 1050;
-            /* Ensure it's on top of other content */
+            opacity: 1;
+            /* Fully visible */
             transition: opacity 1s ease-out;
-            /* Smooth fade-out effect */
+            /* Smooth fade out */
         }
     </style>
 
     @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert" id="flash-message">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" id="flash_message">
             {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -151,7 +150,6 @@
 
 </body>
 <script>
-    var moviesListUrl = "{{ route('movies.list') }}";
 </script>
 <script src="{{ asset('js/main.js') }}" defer></script>
 <script src="{{ asset('js/jquery.min.js') }}"></script>

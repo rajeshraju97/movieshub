@@ -123,17 +123,36 @@ function loadVideo(element, videoKey) {
                          allowfullscreen></iframe>`;
 }
 
-// Automatically hide the flash message after 5 seconds (5000ms)
-setTimeout(function () {
-    let flashMessage = document.getElementById("flash-message");
-    if (flashMessage) {
-        // Fade out effect for better user experience
-        flashMessage.classList.remove("show");
-        flashMessage.classList.add("fade");
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("Flash message script started.");
 
-        // After fade transition, completely hide it
-        setTimeout(function () {
-            flashMessage.style.display = "none";
-        }, 1000); // This gives 1 second for the fade-out effect
-    }
-}, 2000); // 5000ms = 5 seconds
+    setTimeout(function () {
+        let flashMessage = document.getElementById("flash-message");
+        if (flashMessage) {
+            console.log("Flash message found:", flashMessage);
+
+            // Remove Bootstrap's "show" class, which controls visibility
+            flashMessage.classList.remove("show");
+            console.log('Removed Bootstrap "show" class for fading.');
+
+            // Set opacity to 0 for a fading effect
+            flashMessage.style.opacity = "0";
+            console.log("Flash message is fading out...");
+
+            // Wait for the fade effect to complete, then remove from DOM
+            setTimeout(function () {
+                // Finally, apply display: none to hide it
+                flashMessage.style.display = "none";
+                console.log(
+                    "Flash message removed from DOM and display set to none."
+                );
+
+                // Optionally, completely remove it from the DOM
+                flashMessage.remove();
+                console.log("Flash message removed from DOM.");
+            }, 1000); // Duration of fade effect
+        } else {
+            console.log("No flash message found.");
+        }
+    }, 2000); // Start fading after 2 seconds
+});
