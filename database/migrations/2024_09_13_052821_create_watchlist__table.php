@@ -12,11 +12,14 @@ return new class extends Migration {
     {
         Schema::create('watchlist', function (Blueprint $table) {
             $table->id();
-            $table->user_id();
-            $table->movie_id();
-            $table->tv_series_id();
-            $table->anime_id();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('movie_id')->nullable();
+            $table->unsignedBigInteger('tv_series_id')->nullable();
+            $table->unsignedBigInteger('anime_id')->nullable();
             $table->timestamps();
+
+            // Add foreign keys and other constraints
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
