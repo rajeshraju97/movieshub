@@ -37,6 +37,8 @@ Route::get('/movies', [MovieListController::class, 'moviesList'])->name('movies.
 Route::get('/movies/wpml', [MovieListController::class, 'wpmoviesList'])->name('wpmovies.list');
 Route::get('/movies/trml', [MovieListController::class, 'trmoviesList'])->name('trmovies.list');
 Route::get('/movies/tpml', [MovieListController::class, 'tpmoviesList'])->name('tpmovies.list');
+
+
 //for the single page movies view
 Route::get('/movies/{movie}', [SinglePageController::class, 'singleMovie'])->name('single.movie');
 //for the single page tv series view
@@ -51,6 +53,7 @@ Route::get('/tv_series/', [TvSeriesListController::class, 'tvSeriesList'])->name
 
 //for the anime
 Route::get('/anime', [AnimeListController::class, 'animesList'])->name('anime.list');
+Route::get('/anime/top', [AnimeListController::class, 'top_anime'])->name('top.anime.list');
 Route::get('/anime/popular_anime', [AnimeListController::class, 'popular_anime'])->name('popular.anime.list');
 Route::get('/anime/upcoming_anime', [AnimeListController::class, 'upcoming_anime'])->name('upcoming.anime.list');
 
@@ -58,5 +61,4 @@ Route::get('/anime/upcoming_anime', [AnimeListController::class, 'upcoming_anime
 
 Route::get('/watchlist', [WatchlistController::class, 'index'])->name('watchlist');
 Route::post('/watchlist', [WatchlistController::class, 'index'])->name('watchlist');
-
 Route::get('/list', [WatchlistController::class, 'show_watchlist'])->name('list');

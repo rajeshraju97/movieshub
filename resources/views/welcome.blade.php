@@ -76,6 +76,8 @@
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="{{ route('anime.list') }}">All Anime</a>
                                     </li>
+                                    <li><a class="dropdown-item" href="{{ route('top.anime.list') }}">Top Anime</a>
+                                    </li>
                                     <li><a class="dropdown-item" href="{{ route('popular.anime.list') }}">Popular Anime</a>
                                     </li>
                                     <li><a class="dropdown-item" href="{{ route('upcoming.anime.list') }}">Upcoming

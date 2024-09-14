@@ -1,0 +1,13 @@
+For Single anime => https://api.jikan.moe/v4/anime/{id}/full;
+
+For characters => https://api.jikan.moe/v4/anime/{id}/characters;
+
+For Staff => https://api.jikan.moe/v4/anime/{id}/staff;
+
+For Episodes => https://api.jikan.moe/v4/anime/{id}/episodes;
+
+For episde single page =>https://api.jikan.moe/v4/anime/{id}/episodes/{episode};
+
+For trailers => https://api.jikan.moe/v4/anime/{id}/videos;
+
+
