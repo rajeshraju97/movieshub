@@ -41,8 +41,21 @@
                 <li class="nav-item">
                     <a class="nav-link text-light fs-5" href="{{route('tv.series.list')}}">Tv Series</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-light fs-5" href="{{route('anime.list')}}">Anime</a>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Anime
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{{ route('anime.list') }}">All Anime</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{{ route('popular.anime.list') }}">Popular Anime</a>
+                        </li>
+                        <li><a class="dropdown-item" href="{{ route('upcoming.anime.list') }}">Upcoming Anime</a>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <!-- Show Profile, Username, and Logout links if the user is authenticated -->

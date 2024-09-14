@@ -68,8 +68,21 @@
                                 <a class="nav-link text-light fs-5" href="tv_series">Tv Series</a>
                             </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link text-light fs-5" href="anime">Anime</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Anime
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ route('anime.list') }}">All Anime</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="{{ route('popular.anime.list') }}">Popular Anime</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="{{ route('upcoming.anime.list') }}">Upcoming
+                                            Anime</a>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <!-- Show Profile, Username, and Logout links if the user is authenticated -->
                             @auth
@@ -155,9 +168,10 @@
         @php
             $rating_out_of_five = round($movie['vote_average'] / 2);
             $posterUrl = blankPoster($movie['poster_path']);
+            $isInWatchlist = $watchlistItems->contains($movie['id']);
         @endphp
         <div class="item">
-            <div class="text-light">
+            <div class=" text-center text-light">
                 <a href="movies/{{$movie['id']}}" class="text-light">
                     <img src="{{ $posterUrl }}" alt="{{ $movie['title'] }} Poster" class="img-fluid w-60 p-2"
                         style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
@@ -175,6 +189,18 @@
                         </div>
                     </div>
                 </a>
+                @auth
+                    <form action="{{ route('watchlist') }}" method="POST" style="display: inline;">
+                        @csrf
+                        <input type="hidden" name="movie_id" value="{{ $movie['id'] }}">
+                        <input type="hidden" name="action" value="{{ $isInWatchlist ? 'remove' : 'add' }}">
+                        <button type="submit" style="border: none; background: none; padding: 0; cursor: pointer;">
+                            <i class="bi {{ $isInWatchlist ? 'bi-suit-heart-fill' : 'bi-suit-heart' }}"
+                                style="color: {{ $isInWatchlist ? 'red' : '#ffee00' }}; font-size: 27px;"
+                                title="{{ $isInWatchlist ? 'Added to watchlist' : 'Add to watchlist' }}"></i>
+                        </button>
+                    </form>
+                @endauth
             </div>
         </div>
     @endforeach

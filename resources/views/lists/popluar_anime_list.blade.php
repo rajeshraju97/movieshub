@@ -13,6 +13,7 @@
                 @php
                     $rating_out_of_five = round($anime['score'] / 2);
                     $posterUrl = animeBlankPoster($anime['images']['jpg']['image_url']);
+                    $isInWatchlist = $watchlistItems->contains($anime['mal_id']);
                 @endphp
                 <div class="col anime-col mb-4">
                     <div class="text-light">
@@ -41,6 +42,18 @@
                                     @endif
                                 @endfor
                             </div>
+                            @auth
+                                <form action="{{ route('watchlist') }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    <input type="hidden" name="anime_id" value="{{ $anime['mal_id'] }}">
+                                    <input type="hidden" name="action" value="{{ $isInWatchlist ? 'remove' : 'add' }}">
+                                    <button type="submit" style="border: none; background: none; padding: 0; cursor: pointer;">
+                                        <i class="bi {{ $isInWatchlist ? 'bi-suit-heart-fill' : 'bi-suit-heart' }}"
+                                            style="color: {{ $isInWatchlist ? 'red' : '#ffee00' }}; font-size: 27px;"
+                                            title="{{ $isInWatchlist ? 'Added to watchlist' : 'Add to watchlist' }}"></i>
+                                    </button>
+                                </form>
+                            @endauth
                         </div>
                     </div>
                 </div>

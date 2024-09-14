@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Watchlist;
 class AnimeListController extends Controller
 {
     //private
@@ -17,6 +17,18 @@ class AnimeListController extends Controller
 
     public function animesList(Request $request)
     {
+
+        // Check if the user is authenticated
+        if ($request->user()) {
+            $userId = $request->user()->id;
+
+            // Fetch the watchlist for authenticated users for both movies and anime
+            $watchlistItems = Watchlist::where('user_id', $userId)
+                ->pluck('movie_id') // pluck movie ids first
+                ->merge(Watchlist::where('user_id', $userId)->pluck('anime_id')); // merge anime ids into the collection
+        } else {
+            $watchlistItems = collect(); // Empty collection for unauthenticated users
+        }
         // Define the number of anime per page
         $animePerPage = 8;
 
@@ -44,10 +56,23 @@ class AnimeListController extends Controller
             'totalPages' => $totalPages,
             'total_anime' => $totalAnime,
             'animePerPage' => $animePerPage,
+            'watchlistItems' => $watchlistItems,
         ]);
     }
     public function popular_anime(Request $request)
     {
+
+        // Check if the user is authenticated
+        if ($request->user()) {
+            $userId = $request->user()->id;
+
+            // Fetch the watchlist for authenticated users for both movies and anime
+            $watchlistItems = Watchlist::where('user_id', $userId)
+                ->pluck('movie_id') // pluck movie ids first
+                ->merge(Watchlist::where('user_id', $userId)->pluck('anime_id')); // merge anime ids into the collection
+        } else {
+            $watchlistItems = collect(); // Empty collection for unauthenticated users
+        }
         // Define the number of anime per page
         $animePerPage = 8;
 
@@ -76,12 +101,25 @@ class AnimeListController extends Controller
             'totalPages' => $totalPages,
             'total_anime' => $totalAnime,
             'animePerPage' => $animePerPage,
+            'watchlistItems' => $watchlistItems,
         ]);
 
     }
 
     public function upcoming_anime(Request $request)
     {
+
+        // Check if the user is authenticated
+        if ($request->user()) {
+            $userId = $request->user()->id;
+
+            // Fetch the watchlist for authenticated users for both movies and anime
+            $watchlistItems = Watchlist::where('user_id', $userId)
+                ->pluck('movie_id') // pluck movie ids first
+                ->merge(Watchlist::where('user_id', $userId)->pluck('anime_id')); // merge anime ids into the collection
+        } else {
+            $watchlistItems = collect(); // Empty collection for unauthenticated users
+        }
         // Define the number of anime per page
         $animePerPage = 8;
 
@@ -109,7 +147,8 @@ class AnimeListController extends Controller
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'animePerPage' => $animePerPage,
-            'total_anime' => $totalAnime
+            'total_anime' => $totalAnime,
+            'watchlistItems' => $watchlistItems,
         ]);
 
 
