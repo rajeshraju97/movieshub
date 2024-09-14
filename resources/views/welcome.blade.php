@@ -3,28 +3,6 @@
 
 
 
-<style>
-    /* Optional: Custom CSS for better design */
-    #flash-message {
-        position: fixed;
-        top: 10px;
-        /* Adjust top position */
-        right: 10px;
-        /* Adjust right position */
-        z-index: 1050;
-        /* Ensure it's on top of other content */
-        transition: opacity 1s ease-out;
-        /* Smooth fade-out effect */
-    }
-</style>
-
-@if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert" id="flash-message">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
-
 <!-- //owl caurosel of the -->
 <div class="home-slider owl-carousel js-fullheight position-relative">
     @foreach ($nowPlayingMovies as $movie)
@@ -104,7 +82,7 @@
                                     <ul class="dropdown-menu">
                                         <li><a class="dropdown-item" href="#">{{ auth()->user()->username }}</a></li>
 
-                                        <li><a class="dropdown-item" href="{{route('watchlist')}}">WatchList</a></li>
+                                        <li><a class="dropdown-item" href="{{route('list')}}">WatchList</a></li>
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>

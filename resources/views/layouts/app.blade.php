@@ -30,20 +30,22 @@
 <body>
     @yield('content')
     <style>
+        /* Optional: Custom CSS for better design */
         #flash-message {
             position: fixed;
             top: 10px;
+            /* Adjust top position */
             right: 10px;
+            /* Adjust right position */
             z-index: 1050;
-            opacity: 1;
-            /* Fully visible */
+            /* Ensure it's on top of other content */
             transition: opacity 1s ease-out;
-            /* Smooth fade out */
+            /* Smooth fade-out effect */
         }
     </style>
 
     @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert" id="flash_message">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" id="flash-message">
             {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
