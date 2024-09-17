@@ -18,13 +18,14 @@
                 @endphp
                 <div class="col anime-col mb-4">
                     <div class="text-center text-light">
+                        <a href="anime/{{$anime['mal_id']}}" class="text-light">
+                            <img src="{{ $posterUrl }}" alt="{{ $anime['title'] }} Poster" class="img-fluid w-60 p-2"
+                                style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                            <div class="card-body text-center">
 
-                        <img src="{{ $posterUrl }}" alt="{{ $anime['title'] }} Poster" class="img-fluid w-60 p-2"
-                            style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
-                        <div class="card-body text-center">
-
-                            <h6 class="card-title">{{$title}}</h6>
-                        </div>
+                                <h6 class="card-title">{{$title}}</h6>
+                            </div>
+                        </a>
                         @auth
                             <form action="{{ route('watchlist') }}" method="POST" style="display: inline;">
                                 @csrf

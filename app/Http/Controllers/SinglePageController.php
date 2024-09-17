@@ -86,13 +86,6 @@ class SinglePageController extends Controller
                 'accept' => 'application/json',
             ],
         ]);
-
-
-
-
-
-
-
         $tv_series = json_decode($data->getBody(), true);
         $credits = json_decode($credits->getBody(), true);
         $videos = json_decode($videos->getBody(), true)['results'];
@@ -104,4 +97,22 @@ class SinglePageController extends Controller
         // echo $movie;
         return view('single_pages.tv_series_single_page', compact('tv_series', 'casts', 'crews', 'videos'));
     }
+
+    public function singleAnime($mal_id)
+    {
+        // Fetch anime details
+        $data = $this->client->request('GET', 'https://api.jikan.moe/v4/anime/' . $mal_id . '/full');
+
+        // Fetch characters for the anime
+        $characters = $this->client->request('GET', 'https://api.jikan.moe/v4/anime/' . $mal_id . '/characters');
+
+        // Decode the responses
+        $anime = json_decode($data->getBody(), true)['data'];
+
+        // Since the characters array is not nested under a 'character' key
+        $characters = json_decode($characters->getBody(), true)['data'];
+
+        return view('single_pages.anime_single_page', compact('anime', 'characters'));
+    }
+
 }

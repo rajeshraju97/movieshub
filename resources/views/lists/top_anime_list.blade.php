@@ -1,11 +1,12 @@
 @extends('layouts.app')
 @section('content')
+
 <!-- Navbar Inside Each Carousel Slide -->
 @include('layouts.navbar')
 
 <div class="container col-md-12" style="margin-top:7rem !important;">
-    <h1 class="mb-1 text-center text-light">Animes</h1>
-    <p class=" mb-3 text-center text-light"><span>(Total Anime:</span>{{$total_anime}})</p>
+    <h1 class="mb-1 text-center text-light">Top Anime</h1>
+    <p class=" mb-3 text-center text-light"><span>(Total Popular Anime:</span>{{$total_anime}})</p>
 
     <div class="row anime-row">
         @foreach ($animes as $anime)
@@ -34,12 +35,11 @@
                                 <p>&nbsp;&nbsp;&nbsp;{{$anime['aired']['string']}}</p>
 
                                 <div class="star-rating">
-                                    @for ($i = 0; $i < 5; $i++)
-                                        @if ($i < $rating_out_of_five)
-                                            <i class="bi bi-star-fill text-warning"></i> <!-- Filled star -->
-                                        @else
-                                            <i class="bi bi-star text-warning"></i> <!-- Empty star -->
-                                        @endif
+                                    @for ($i = 0; $i < 5; $i++) @if ($i < $rating_out_of_five) <i
+                                        class="bi bi-star-fill text-warning"></i> <!-- Filled star -->
+                                    @else
+                                        <i class="bi bi-star text-warning"></i> <!-- Empty star -->
+                                    @endif
                                     @endfor
                                 </div>
                         </a>
@@ -67,7 +67,7 @@
         <ul class="pagination">
             @if ($currentPage > 1)
                 <li class="page-item">
-                    <a class="page-link" href="{{ url('anime?page=' . ($currentPage - 1)) }}">Previous</a>
+                    <a class="page-link" href="{{ url('anime/popular_anime?page=' . ($currentPage - 1)) }}">Previous</a>
                 </li>
             @endif
 
@@ -78,13 +78,13 @@
 
             @for ($i = $startPage; $i <= $endPage; $i++)
                 <li class="page-item @if ($i == $currentPage) active @endif">
-                    <a class="page-link" href="{{ url('anime?page=' . $i) }}">{{ $i }}</a>
+                    <a class="page-link" href="{{ url('anime/popular_anime?page=' . $i) }}">{{ $i }}</a>
                 </li>
             @endfor
 
             @if ($currentPage < $totalPages)
                 <li class="page-item">
-                    <a class="page-link" href="{{ url('anime?page=' . ($currentPage + 1)) }}">Next</a>
+                    <a class="page-link" href="{{ url('anime/popular_anime?page=' . ($currentPage + 1)) }}">Next</a>
                 </li>
             @endif
         </ul>
@@ -92,7 +92,7 @@
 </div>
 <!-- Jump to Page Form -->
 <div class="d-flex justify-content-center mt-3">
-    <form action="{{ url('anime') }}" method="get" class="form-inline">
+    <form action="{{ url('anime/popular_anime') }}" method="get" class="form-inline">
         <label for="jumpToPage" class="mr-2 text-light fw-bold">Jump to Page:</label>
         <input type="number" id="jumpToPage" name="page" class="form-control" min="1" max="{{ $totalPages }}"
             value="{{ $currentPage }}">

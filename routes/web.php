@@ -43,6 +43,8 @@ Route::get('/movies/tpml', [MovieListController::class, 'tpmoviesList'])->name('
 Route::get('/movies/{movie}', [SinglePageController::class, 'singleMovie'])->name('single.movie');
 //for the single page tv series view
 Route::get('/tv_series/{series}', [SinglePageController::class, 'singleTvSeries'])->name('single.tvseries');
+//for the single page anime series view
+Route::get('/anime/{anime}', [SinglePageController::class, 'singleAnime'])->name('single.anime');
 
 
 
@@ -56,6 +58,7 @@ Route::get('/anime', [AnimeListController::class, 'animesList'])->name('anime.li
 Route::get('/anime/top', [AnimeListController::class, 'top_anime'])->name('top.anime.list');
 Route::get('/anime/popular_anime', [AnimeListController::class, 'popular_anime'])->name('popular.anime.list');
 Route::get('/anime/upcoming_anime', [AnimeListController::class, 'upcoming_anime'])->name('upcoming.anime.list');
+
 
 //for watchlist
 
