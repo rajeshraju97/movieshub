@@ -10,4 +10,6 @@ For episde single page =>https://api.jikan.moe/v4/anime/{id}/episodes/{episode};
 
 For trailers => https://api.jikan.moe/v4/anime/{id}/videos;
 
+For Recommendations => https://api.jikan.moe/v4/anime/
+
 

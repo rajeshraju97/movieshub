@@ -89,10 +89,56 @@
                         <span>▶️</span>
                     </div>
                 </div>
-                <h4 class="text-light text-center">{{ $anime['title_english'] }}</h4>
             </div>
         </div>
     </div>
+    <!-- #endregion  video section-->
+
+
+
+
+    <!-- #region recommendations anime section-->
+    <h3 class="text-light fs-4 fw-bold">Recommendations</h3>
+    <div class="recommendations owl-carousel">
+
+        @foreach ($recommendations as $recommendation)
+                @php
+
+                    $posterUrl = animeBlankPoster($recommendation['entry']['images']['jpg']['image_url']);
+                    $isInWatchlist = $watchlistItems->contains($recommendation['entry']['mal_id']);
+                @endphp
+                <div class="item">
+                    <div class="text-light">
+                        <a href="anime/{{$recommendation['entry']['mal_id']}}" class="text-light">
+                            <img src="{{ $posterUrl }}" alt="{{ $recommendation['entry']['title'] }} Poster"
+                                class="img-fluid w-60 p-2 recommendation-img"
+                                style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">{{ $recommendation['entry']['title'] }}</h6>
+                        </a>
+                        @auth
+                            <form action="{{ route('watchlist') }}" method="POST" style="display: inline;">
+                                @csrf
+                                <input type="hidden" name="anime_id" value="{{ $recommendation['entry']['mal_id'] }}">
+                                <input type="hidden" name="action" value="{{ $isInWatchlist ? 'remove' : 'add' }}">
+                                <button type="submit" style="border: none; background: none; padding: 0; cursor: pointer;">
+                                    <i class="bi {{ $isInWatchlist ? 'bi-suit-heart-fill' : 'bi-suit-heart' }}"
+                                        style="color: {{ $isInWatchlist ? 'red' : '#ffee00' }}; font-size: 27px;"
+                                        title="{{ $isInWatchlist ? 'Added to watchlist' : 'Add to watchlist' }}"></i>
+                                </button>
+                            </form>
+                        @endauth
+                    </div>
+
+                </div>
+            </div>
+        @endforeach
+</div>
+
+</div>
+<!-- #endregion recommendations anime section-->
+
+
 
 
 

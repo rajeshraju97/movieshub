@@ -28,3 +28,9 @@ function blankProfile($posterPath)
 
     return $posterPath ? $baseUrl . $posterPath : $defaultImage;
 }
+
+function animeblankProfile($posterPath)
+{
+    $defaultImage = asset('images/blank_profile.png'); // Replace with the
+    return $posterPath ? $posterPath : $defaultImage;
+}

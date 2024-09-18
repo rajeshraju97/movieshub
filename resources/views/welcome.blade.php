@@ -264,13 +264,14 @@
     @foreach ($popularTeluguMovies as $movie)
             @php
                 $rating_out_of_five = round($movie['vote_average'] / 2);
+                $posterUrl = blankPoster($movie['poster_path']);
                 $isInWatchlist = $watchlistItems->contains($movie['id']);
+
             @endphp
             <div class="item">
                 <div class="text-light">
                     <a href="movies/{{$movie['id']}}" class="text-light">
-                        <img src="{{ 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'] }}"
-                            alt="{{ $movie['title'] }} Poster" class="img-fluid w-60 p-2"
+                        <img src="{{$posterUrl}}" alt="{{ $movie['title'] }} Poster" class="img-fluid w-60 p-2"
                             style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ limitWords($movie['title'], 1) }}</h5>
@@ -399,7 +400,8 @@
             <div class="item">
                 <div class="text-light">
                     <a href="anime/{{$anime['mal_id']}}" class="text-light">
-                        <img src="{{ $posterUrl }}" alt="{{ $anime['title'] }} Poster" class="img-fluid w-60 p-2"
+                        <img src="{{ $posterUrl }}" alt="{{ $anime['title'] }} Poster"
+                            class="img-fluid w-60 p-2 recommendation-img"
                             style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
                         <div class="card-body text-center">
                             <h6 class="card-title">{{ $anime['title_english'] }}</h6>
@@ -454,7 +456,7 @@
 
         <div class="item">
             <div class="text-light">
-                <img src="{{ $posterUrl }}" alt="{{ $anime['title'] }} Poster" class="img-fluid w-60 p-2"
+                <img src="{{ $posterUrl }}" alt="{{ $anime['title'] }} Poster" class="img-fluid w-60 p-2 recommendation-img"
                     style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
                 <div class="card-body text-center">
                     <a href="anime/{{$anime['mal_id']}}" class="text-light">

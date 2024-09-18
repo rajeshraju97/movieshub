@@ -104,9 +104,42 @@
         });
     };
 
+    var recommendations = function () {
+        $(".recommendations").owlCarousel({
+            loop: true,
+            autoplay: true,
+            margin: 10,
+            animateOut: "fadeOut",
+            animateIn: "fadeIn",
+            nav: true,
+            dots: false,
+            autoplayHoverPause: false,
+            items: 8,
+            navText: [
+                "<span class='ion-ios-arrow-back'></span>",
+                "<span class='ion-ios-arrow-forward'></span>",
+            ],
+            responsive: {
+                0: {
+                    items: 2,
+                },
+                600: {
+                    items: 5,
+                },
+                1000: {
+                    items: 6,
+                },
+                1200: {
+                    items: 8,
+                },
+            },
+        });
+    };
+
     carousel();
     now_playing();
     movie_cast();
+    recommendations();
 })(jQuery);
 
 $(document).ready(function () {

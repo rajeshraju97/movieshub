@@ -11274,3 +11274,106 @@ h5,
 .video-thumbnail:hover .play-button-overlay {
     opacity: 0.6;
 }
+
+/* owl curosel for the reccomendations  */
+
+/* //curosel style for the now playing */
+
+.owl-carousel.recommendations .owl-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+}
+.owl-carousel.recommendations .owl-nav .owl-prev,
+.owl-carousel.recommendations .owl-nav .owl-next {
+    position: absolute;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    outline: none !important;
+    -webkit-transition: 0.3s;
+    -o-transition: 0.3s;
+    transition: 0.3s;
+    opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+    .owl-carousel.recommendations .owl-nav .owl-prev,
+    .owl-carousel.recommendations .owl-nav .owl-next {
+        -webkit-transition: none;
+        -o-transition: none;
+        transition: none;
+    }
+}
+.owl-carousel.recommendations .owl-nav .owl-prev span:before,
+.owl-carousel.recommendations .owl-nav .owl-next span:before {
+    font-size: 30px;
+    color: rgba(255, 255, 255, 0.5);
+    -webkit-transition: 0.3s;
+    -o-transition: 0.3s;
+    transition: 0.3s;
+}
+@media (prefers-reduced-motion: reduce) {
+    .owl-carousel.recommendations .owl-nav .owl-prev span:before,
+    .owl-carousel.recommendations .owl-nav .owl-next span:before {
+        -webkit-transition: none;
+        -o-transition: none;
+        transition: none;
+    }
+}
+.owl-carousel.recommendations .owl-nav .owl-prev:hover span:before,
+.owl-carousel.recommendations .owl-nav .owl-prev:focus span:before,
+.owl-carousel.recommendations .owl-nav .owl-next:hover span:before,
+.owl-carousel.recommendations .owl-nav .owl-next:focus span:before {
+    color: #fff;
+}
+.owl-carousel.recommendations .owl-nav .owl-prev {
+    left: 0;
+    margin-left: 0;
+}
+.owl-carousel.recommendations .owl-nav .owl-next {
+    right: 0;
+    margin-right: 0;
+}
+.owl-carousel.recommendations:hover .owl-nav .owl-prev,
+.owl-carousel.recommendations:hover .owl-nav .owl-next {
+    opacity: 1;
+}
+.owl-carousel.recommendations:hover .owl-nav .owl-prev {
+    margin-left: 50px;
+}
+.owl-carousel.recommendations:hover .owl-nav .owl-next {
+    margin-right: 50px;
+}
+.owl-carousel.recommendations .owl-dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 40px;
+    width: 100%;
+    text-align: center;
+}
+@media (max-width: 767.98px) {
+    .owl-carousel.recommendations .owl-dots {
+        bottom: 5px;
+    }
+}
+.owl-carousel.recommendations .owl-dots .owl-dot {
+    width: 10px;
+    height: 10px;
+    margin: 5px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+}
+.owl-carousel.recommendations .owl-dots .owl-dot.active {
+    background: #fff;
+}
+
+.owl-carousel.owl-drag .owl-item {
+    -ms-touch-action: pan-y;
+    touch-action: pan-y;
+}
+
+.recommendation-img {
+    height: 250px; /* Set a fixed height for all images */
+    object-fit: cover; /* Ensures the image maintains its aspect ratio and fills the area */
+}

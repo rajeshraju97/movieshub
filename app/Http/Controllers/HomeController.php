@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use ErrorException;
 use Illuminate\Http\Request;
 use App\Models\Watchlist;
 use GuzzleHttp\Client;
@@ -19,6 +20,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         // Check if the user is authenticated
+        
         if ($request->user()) {
             $userId = $request->user()->id;
 
