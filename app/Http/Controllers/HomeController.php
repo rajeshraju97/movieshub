@@ -20,7 +20,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         // Check if the user is authenticated
-        
+
         if ($request->user()) {
             $userId = $request->user()->id;
 
@@ -41,6 +41,10 @@ class HomeController extends Controller
         $popularAnime = $this->fetchAnime('bypopularity');
         $upcomingAnime = $this->fetchAnime('upcoming');
 
+        $air_today_tvs = $this->fetchTvseries('airing_today');
+        $popular_tvs = $this->fetchTvseries('popular');
+        $top_rated_tvs = $this->fetchTvseries('top_rated');
+
         // Pass movies, anime, and watchlist status to the view
         return view('welcome', compact(
             'nowPlayingMovies',
@@ -50,7 +54,10 @@ class HomeController extends Controller
             'upcomingMovies',
             'popularAnime',
             'upcomingAnime',
-            'watchlistItems'
+            'watchlistItems',
+            'air_today_tvs',
+            'popular_tvs',
+            'top_rated_tvs',
         ));
     }
 
@@ -78,7 +85,7 @@ class HomeController extends Controller
         $movies = json_decode($response->getBody(), true)['results'];
 
         // Fetch Genre List and Map Genre IDs to Names
-        $genreMap = $this->fetchGenreMap();
+        $genreMap = $this->fetchGenreMovieMap();
 
         // Add Genre Names to Movies
         foreach ($movies as &$movie) {
@@ -90,6 +97,43 @@ class HomeController extends Controller
         return $movies;
     }
 
+
+    private function fetchTvseries($type, $region = null, $language = null)
+    {
+        $query = [
+            'api_key' => $this->apiKey,
+            'language' => 'en-US',
+            'region' => $region,
+        ];
+
+        if ($language && $type = "airing_today" && $region) {
+            // Use the /discover/movie endpoint to filter by original language
+            // For other cases, use the /movie endpoint
+            $response = $this->client->request('GET', "https://api.themoviedb.org/3/tv/{$type}", [
+                'query' => $query,
+            ]);
+        } else {
+            $response = $this->client->request('GET', "https://api.themoviedb.org/3/tv/{$type}", [
+                'query' => $query,
+            ]);
+        }
+
+        $tvseries = json_decode($response->getBody(), true)['results'];
+
+        // Fetch Genre List and Map Genre IDs to Names
+        $genreMap = $this->fetchGenreTVMap();
+
+        // Add Genre Names to Movies
+        foreach ($tvseries as &$tvserie) {
+            $tvserie['genre_names'] = array_map(function ($genreId) use ($genreMap) {
+                return $genreMap[$genreId] ?? 'Unknown'; // 'Unknown' as fallback
+            }, $tvserie['genre_ids']);
+        }
+
+        return $tvseries;
+    }
+
+
     private function fetchAnime($type)
     {
         $response = $this->client->request('GET', "https://api.jikan.moe/v4/top/anime?filter=$type");
@@ -99,9 +143,27 @@ class HomeController extends Controller
 
 
 
-    private function fetchGenreMap()
+    private function fetchGenreMovieMap()
     {
         $response = $this->client->request('GET', 'https://api.themoviedb.org/3/genre/movie/list', [
+            'query' => ['api_key' => $this->apiKey],
+        ]);
+
+        $genres = json_decode($response->getBody(), true)['genres'];
+
+        // Map Genre IDs to Names
+        $genreMap = [];
+        foreach ($genres as $genre) {
+            $genreMap[$genre['id']] = $genre['name'];
+        }
+
+        return $genreMap;
+    }
+
+
+    private function fetchGenreTVMap()
+    {
+        $response = $this->client->request('GET', 'https://api.themoviedb.org/3/genre/tv/list', [
             'query' => ['api_key' => $this->apiKey],
         ]);
 

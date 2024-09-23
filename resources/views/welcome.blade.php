@@ -388,6 +388,129 @@
     @endforeach
 </div>
 
+
+
+<!--Top Rated Section -->
+<h1 class="text-left my-5 text-light">Top Rated Tv Series</h1>
+<div class="now-playing owl-carousel">
+    @foreach ($top_rated_tvs as $top_rated_tv)
+        @php
+            $rating_out_of_five = round($top_rated_tv['vote_average'] / 2);
+            $posterUrl = blankPoster($top_rated_tv['poster_path']);
+            $isInWatchlist = $watchlistItems->contains($top_rated_tv['id']);
+
+        @endphp
+        <div class="item">
+            <div class="text-light text-center">
+                <a href="tv_series/{{$top_rated_tv['id']}}" class="text-light">
+                    <img src="{{ $posterUrl }}" alt="{{ $top_rated_tv['name'] }} Poster" class="img-fluid w-60 p-2"
+                        style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ limitWords($top_rated_tv['name'], 1) }}</h5>
+                        <p><i class="bi bi-calendar-event"
+                                style="color:#ffee00;"></i>&nbsp;{{$top_rated_tv['first_air_date']}}</p>
+                    </div>
+                </a>
+                @auth
+                    <form action="{{ route('watchlist') }}" method="POST" style="display: inline;">
+                        @csrf
+                        <input type="hidden" name="tv_series_id" value="{{ $top_rated_tv['id'] }}">
+                        <input type="hidden" name="action" value="{{ $isInWatchlist ? 'remove' : 'add' }}">
+                        <button type="submit" style="border: none; background: none; padding: 0; cursor: pointer;">
+                            <i class="bi {{ $isInWatchlist ? 'bi-suit-heart-fill' : 'bi-suit-heart' }}"
+                                style="color: {{ $isInWatchlist ? 'red' : '#ffee00' }}; font-size: 27px;"
+                                title="{{ $isInWatchlist ? 'Added to watchlist' : 'Add to watchlist' }}"></i>
+                        </button>
+                    </form>
+                @endauth
+            </div>
+        </div>
+    @endforeach
+</div>
+
+
+
+<!--tv airing_today Section -->
+<h1 class="text-left my-5 text-light">Tv Series Airing Today</h1>
+<div class="now-playing owl-carousel">
+    @foreach ($air_today_tvs as $air_today_tv)
+        @php
+            $rating_out_of_five = round($air_today_tv['vote_average'] / 2);
+            $posterUrl = blankPoster($air_today_tv['poster_path']);
+            $isInWatchlist = $watchlistItems->contains($air_today_tv['id']);
+
+        @endphp
+        <div class="item">
+            <div class="text-light text-center">
+                <a href="tv_series/{{$air_today_tv['id']}}" class="text-light">
+                    <img src="{{ $posterUrl }}" alt="{{ $air_today_tv['name'] }} Poster" class="img-fluid w-60 p-2"
+                        style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ limitWords($air_today_tv['name'], 1) }}</h5>
+                        <p><i class="bi bi-calendar-event"
+                                style="color:#ffee00;"></i>&nbsp;{{$air_today_tv['first_air_date']}}</p>
+                    </div>
+                </a>
+                @auth
+                    <form action="{{ route('watchlist') }}" method="POST" style="display: inline;">
+                        @csrf
+                        <input type="hidden" name="tv_series_id" value="{{ $air_today_tv['id'] }}">
+                        <input type="hidden" name="action" value="{{ $isInWatchlist ? 'remove' : 'add' }}">
+                        <button type="submit" style="border: none; background: none; padding: 0; cursor: pointer;">
+                            <i class="bi {{ $isInWatchlist ? 'bi-suit-heart-fill' : 'bi-suit-heart' }}"
+                                style="color: {{ $isInWatchlist ? 'red' : '#ffee00' }}; font-size: 27px;"
+                                title="{{ $isInWatchlist ? 'Added to watchlist' : 'Add to watchlist' }}"></i>
+                        </button>
+                    </form>
+                @endauth
+            </div>
+        </div>
+    @endforeach
+</div>
+
+
+<!--Popular Section -->
+<h1 class="text-left my-5 text-light">Popular Tv Series</h1>
+<div class="now-playing owl-carousel">
+    @foreach ($popular_tvs as $popular_tv)
+        @php
+            $rating_out_of_five = round($popular_tv['vote_average'] / 2);
+            $posterUrl = blankPoster($popular_tv['poster_path']);
+            $isInWatchlist = $watchlistItems->contains($popular_tv['id']);
+
+        @endphp
+        <div class="item">
+            <div class="text-light text-center">
+                <a href="tv_series/{{$popular_tv['id']}}" class="text-light">
+                    <img src="{{ $posterUrl }}" alt="{{ $popular_tv['name'] }} Poster" class="img-fluid w-60 p-2"
+                        style="border-radius: 17px;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ limitWords($popular_tv['name'], 1) }}</h5>
+                        <p><i class="bi bi-calendar-event"
+                                style="color:#ffee00;"></i>&nbsp;{{$popular_tv['first_air_date']}}</p>
+                    </div>
+                </a>
+                @auth
+                    <form action="{{ route('watchlist') }}" method="POST" style="display: inline;">
+                        @csrf
+                        <input type="hidden" name="tv_series_id" value="{{ $popular_tv['id'] }}">
+                        <input type="hidden" name="action" value="{{ $isInWatchlist ? 'remove' : 'add' }}">
+                        <button type="submit" style="border: none; background: none; padding: 0; cursor: pointer;">
+                            <i class="bi {{ $isInWatchlist ? 'bi-suit-heart-fill' : 'bi-suit-heart' }}"
+                                style="color: {{ $isInWatchlist ? 'red' : '#ffee00' }}; font-size: 27px;"
+                                title="{{ $isInWatchlist ? 'Added to watchlist' : 'Add to watchlist' }}"></i>
+                        </button>
+                    </form>
+                @endauth
+            </div>
+        </div>
+    @endforeach
+</div>
+
+
+
+
+
 <!--Popular Anime Section -->
 <h1 class="text-left my-5 text-light"><a href="anime/popular_anime" class="text-light">Popular Anime</a></h1>
 <div class="now-playing owl-carousel">
