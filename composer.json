@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.2",
         "aws/aws-sdk-php": "^3.321",
+        "jikan/jikan-php": "^4.0",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.5",

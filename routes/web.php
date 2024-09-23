@@ -65,3 +65,7 @@ Route::get('/anime/upcoming_anime', [AnimeListController::class, 'upcoming_anime
 Route::get('/watchlist', [WatchlistController::class, 'index'])->name('watchlist');
 Route::post('/watchlist', [WatchlistController::class, 'index'])->name('watchlist');
 Route::get('/list', [WatchlistController::class, 'show_watchlist'])->name('list');
+
+
+//for test
+Route::get('/test', [testController::class, 'test_it_gets_anime']);

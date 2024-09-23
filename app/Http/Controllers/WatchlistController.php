@@ -114,9 +114,10 @@ class WatchlistController extends Controller
             }
 
             if ($item->anime_id) {
-                $response = $this->client->request('GET', 'https://api.jikan.moe/v3/anime/' . $item->anime_id . '/full');
+                $response = $this->client->request('GET', 'https://api.jikan.moe/v4/anime/' . $item->anime_id . '/full');
 
-                $animeData = json_decode($response->getBody()->getContents(), true)['data'];
+                // Decode the responses
+                $animeData = json_decode($response->getBody(), true)['data'];
 
                 // Add TV series data to the mediaDetails array
                 $mediaDetails[] = [
