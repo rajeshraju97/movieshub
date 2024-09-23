@@ -13,3 +13,9 @@ For trailers => https://api.jikan.moe/v4/anime/{id}/videos;
 For Recommendations => https://api.jikan.moe/v4/anime/
 
 
+for TV'S airing_today =>https://api.themoviedb.org/3/tv/airing_today
+
+for TV'S Popular =>https://api.themoviedb.org/3/tv/popular
+
+
+for TV'S Top Rated =>https://api.themoviedb.org/3/tv/top_rated
