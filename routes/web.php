@@ -50,7 +50,7 @@ Route::get('/anime/{anime}', [SinglePageController::class, 'singleAnime'])->name
 
 
 // TV Series Routes
-Route::get('/tv_series/', [TvSeriesListController::class, 'tvSeriesList'])->name('tv.series.list');
+Route::get('/tv_series', [TvSeriesListController::class, 'tvSeriesList'])->name('tv.series.list');
 
 
 //for the anime

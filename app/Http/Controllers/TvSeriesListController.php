@@ -18,7 +18,7 @@ class TvSeriesListController extends Controller
         $this->client = new Client();
     }
 
-    private function fetchMoviesWithPagination($endpoint, $page, $additionalParams = [])
+    private function fetchtvseriesWithPagination($endpoint, $page, $additionalParams = [])
     {
         $maxPage = 500;
 
@@ -48,7 +48,7 @@ class TvSeriesListController extends Controller
         if ($request->user()) {
             $userId = $request->user()->id;
 
-            // Fetch the watchlist for authenticated users for both movies and anime
+            // Fetch the watchlist for authenticated users for both tvseries and anime
             $watchlistItems = Watchlist::where('user_id', $userId)
                 ->pluck('tv_series_id') // pluck movie ids first
                 ->merge(Watchlist::where('user_id', $userId)->pluck('anime_id')); // merge anime ids into the collection
@@ -132,7 +132,7 @@ class TvSeriesListController extends Controller
 
 
         // Fetch data for the current page
-        $data = $this->fetchMoviesWithPagination('https://api.themoviedb.org/3/discover/tv', $page, $queryParams);
+        $data = $this->fetchtvseriesWithPagination('https://api.themoviedb.org/3/discover/tv', $page, $queryParams);
 
 
         // Get the TV series data for the current page
@@ -156,7 +156,6 @@ class TvSeriesListController extends Controller
             'watchlistItems' => $watchlistItems,
         ]);
     }
-
 
 
 }
