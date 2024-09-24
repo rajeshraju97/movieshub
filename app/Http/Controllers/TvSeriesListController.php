@@ -159,4 +159,108 @@ class TvSeriesListController extends Controller
 
 
 
+    public function top_rated_tv_series(Request $request)
+    {
+
+        if ($request->user()) {
+            $userId = $request->user()->id;
+
+            // Fetch the watchlist for authenticated users for both movies and anime
+            $watchlistItems = Watchlist::where('user_id', $userId)
+                ->pluck('movie_id') // pluck movie ids first
+                ->merge(Watchlist::where('user_id', $userId)->pluck('anime_id')); // merge anime ids into the collection
+        } else {
+            $watchlistItems = collect(); // Empty collection for unauthenticated users
+        }
+
+
+        $seriesPerPage = 20;
+        $page = $request->query('page', 1);
+
+        $data = $this->fetchMoviesWithPagination('https://api.themoviedb.org/3/tv/top_rated', $page, [
+            'sort_by' => 'popularity.desc',
+        ]);
+
+        $series = $data['results'];
+        $totalPages = $data['total_pages'];
+
+        return view('lists.top_rated_tvl', [
+            'series' => $series,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'seriesPerPage' => $seriesPerPage,
+            'watchlistItems' => $watchlistItems,
+        ]);
+
+    }
+
+    public function airing_today(Request $request)
+    {
+        if ($request->user()) {
+            $userId = $request->user()->id;
+
+            // Fetch the watchlist for authenticated users for both movies and anime
+            $watchlistItems = Watchlist::where('user_id', $userId)
+                ->pluck('movie_id') // pluck movie ids first
+                ->merge(Watchlist::where('user_id', $userId)->pluck('anime_id')); // merge anime ids into the collection
+        } else {
+            $watchlistItems = collect(); // Empty collection for unauthenticated users
+        }
+
+
+        $seriesPerPage = 20;
+        $page = $request->query('page', 1);
+
+        $data = $this->fetchMoviesWithPagination('https://api.themoviedb.org/3/tv/airing_today', $page, [
+            'sort_by' => 'popularity.desc',
+        ]);
+
+        $series = $data['results'];
+        $totalPages = $data['total_pages'];
+
+        return view('lists.airing_today_tvl', [
+            'series' => $series,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'seriesPerPage' => $seriesPerPage,
+            'watchlistItems' => $watchlistItems,
+        ]);
+
+    }
+
+    public function popular(Request $request)
+    {
+        if ($request->user()) {
+            $userId = $request->user()->id;
+
+            // Fetch the watchlist for authenticated users for both movies and anime
+            $watchlistItems = Watchlist::where('user_id', $userId)
+                ->pluck('movie_id') // pluck movie ids first
+                ->merge(Watchlist::where('user_id', $userId)->pluck('anime_id')); // merge anime ids into the collection
+        } else {
+            $watchlistItems = collect(); // Empty collection for unauthenticated users
+        }
+
+
+        $seriesPerPage = 20;
+        $page = $request->query('page', 1);
+
+        $data = $this->fetchMoviesWithPagination('https://api.themoviedb.org/3/tv/popular', $page, [
+            'sort_by' => 'popularity.desc',
+        ]);
+
+        $series = $data['results'];
+        $totalPages = $data['total_pages'];
+
+        return view('lists.popular_tvl', [
+            'series' => $series,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'seriesPerPage' => $seriesPerPage,
+            'watchlistItems' => $watchlistItems,
+        ]);
+
+    }
+
+
 }

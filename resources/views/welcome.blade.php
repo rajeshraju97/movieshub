@@ -64,8 +64,21 @@
                                             Movies</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light fs-5" href="tv_series">Tv Series</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Tv Series
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ route('tv.series.list') }}">All Tv Series</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('top.rated.list') }}">Top Rated Series</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="{{ route('airing.today.list') }}">Airing Today
+                                            Series</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="{{ route('popular.series.list') }}">Popular
+                                            Series</a></li>
+                                </ul>
                             </li>
 
                             <li class="nav-item dropdown">

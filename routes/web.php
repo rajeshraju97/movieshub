@@ -50,7 +50,10 @@ Route::get('/anime/{anime}', [SinglePageController::class, 'singleAnime'])->name
 
 
 // TV Series Routes
-Route::get('/tv_series/', [TvSeriesListController::class, 'tvSeriesList'])->name('tv.series.list');
+Route::get('/tv_series', [TvSeriesListController::class, 'tvSeriesList'])->name('tv.series.list');
+Route::get('/tv/top_rated_tv_series', [TvSeriesListController::class, 'top_rated_tv_series'])->name('top.rated.list');
+Route::get('/tv/airing_today', [TvSeriesListController::class, 'airing_today'])->name('airing.today.list');
+Route::get('/tv/popular', [TvSeriesListController::class, 'popular'])->name('popular.series.list');
 
 
 //for the anime
